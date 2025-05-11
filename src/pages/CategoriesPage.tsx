@@ -4,6 +4,7 @@ import CategoryGrid from '@/components/CategoryGrid';
 import { mockCategories } from '@/data/mockData';
 import { getNewsArticles, NewsArticle } from '@/services/mongoDbService';
 import { Card, CardContent } from "@/components/ui/card";
+import { toast } from "@/components/ui/use-toast";
 
 const CategoriesPage = () => {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
@@ -20,6 +21,11 @@ const CategoriesPage = () => {
       } catch (err) {
         console.error("Error fetching articles:", err);
         setError("Failed to load articles. Please try again later.");
+        toast({
+          title: "Error loading news",
+          description: "Could not load the latest news articles.",
+          variant: "destructive"
+        });
       } finally {
         setLoading(false);
       }

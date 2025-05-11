@@ -4,7 +4,8 @@ import { mockNews } from '@/data/mockData';
 import Logo from '@/components/Logo';
 import SplashScreen from '@/components/SplashScreen';
 import { useNavigate } from 'react-router-dom';
-import { getNewsArticles, NewsArticle } from '@/services/mongoDbService';
+import { getNewsArticles } from '@/services/mongoDbService';
+import { toast } from "@/components/ui/use-toast";
 
 const HomePage = () => {
   const [showSplash, setShowSplash] = useState(true);
@@ -36,7 +37,7 @@ const HomePage = () => {
         const articles = await getNewsArticles();
         
         if (articles && articles.length > 0) {
-          // Convert MongoDB articles to the format expected by NewsStorySlider
+          // Convert articles to the format expected by NewsStorySlider
           const formattedArticles = articles.map((article, index) => ({
             id: index.toString(),
             title: article.title,
@@ -51,6 +52,11 @@ const HomePage = () => {
         }
       } catch (error) {
         console.error('Error fetching news articles:', error);
+        toast({
+          title: "Error loading news",
+          description: "Could not load the latest news articles.",
+          variant: "destructive"
+        });
         // Keep using mock data if fetch fails
       } finally {
         setLoading(false);

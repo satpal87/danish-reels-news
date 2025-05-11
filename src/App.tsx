@@ -12,8 +12,30 @@ import SettingsPage from "./pages/SettingsPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import NotFound from "./pages/NotFound";
 import BottomNav from "./components/BottomNav";
+import { useIsMobile } from './hooks/use-mobile';
 
 const queryClient = new QueryClient();
+
+const AppContent = () => {
+  const isMobile = useIsMobile();
+  
+  return (
+    <div className="relative min-h-screen">
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/saved" element={<SavedPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      
+      {/* Bottom navigation bar - only show on mobile */}
+      {isMobile && <BottomNav />}
+    </div>
+  );
+};
 
 const App = () => {
   return (
@@ -22,20 +44,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="relative min-h-screen">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/categories" element={<CategoriesPage />} />
-              <Route path="/saved" element={<SavedPage />} />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/onboarding" element={<OnboardingPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            
-            {/* Bottom navigation bar */}
-            <BottomNav />
-          </div>
+          <AppContent />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

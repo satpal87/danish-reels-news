@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,6 +9,7 @@ export interface NewsItemProps {
   category: string;
   imageUrl: string;
   fullStory?: string;
+  url?: string;
 }
 
 interface NewsCardProps {
@@ -68,6 +68,21 @@ const NewsCard = ({ news, isActive, onComplete, autoSlide = true }: NewsCardProp
     };
   }, [isActive, readMore, onComplete, autoSlide]);
 
+  const handleReadMore = () => {
+    if (readMore) {
+      setReadMore(false);
+      return;
+    }
+    
+    if (news.url) {
+      // If URL is provided, open it in a new tab
+      window.open(news.url, '_blank', 'noopener,noreferrer');
+    } else {
+      // Otherwise just toggle the read more state
+      setReadMore(true);
+    }
+  };
+
   return (
     <div className={`absolute inset-0 transition-opacity duration-500 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
       {/* Progress bar */}
@@ -110,7 +125,7 @@ const NewsCard = ({ news, isActive, onComplete, autoSlide = true }: NewsCardProp
           </div>
           
           <Button 
-            onClick={() => setReadMore(!readMore)}
+            onClick={handleReadMore}
             className="mt-4 self-start"
           >
             {readMore ? 'Show Less' : 'Read More'} 

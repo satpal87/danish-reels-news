@@ -1,13 +1,15 @@
-
 import { useEffect, useState } from 'react';
 import NewsStorySlider from '@/components/NewsStorySlider';
 import { mockNews } from '@/data/mockData';
 import Logo from '@/components/Logo';
 import SplashScreen from '@/components/SplashScreen';
 import { useNavigate } from 'react-router-dom';
+import { getNewsArticles, NewsArticle } from '@/services/mongoDbService';
 
 const HomePage = () => {
   const [showSplash, setShowSplash] = useState(true);
+  const [newsStories, setNewsStories] = useState(mockNews);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -27,6 +29,37 @@ const HomePage = () => {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        setLoading(true);
+        const articles = await getNewsArticles();
+        
+        if (articles && articles.length > 0) {
+          // Convert MongoDB articles to the format expected by NewsStorySlider
+          const formattedArticles = articles.map((article, index) => ({
+            id: index.toString(),
+            title: article.title,
+            summary: article.summary,
+            category: 'Top News', // Default category
+            imageUrl: article.image,
+            fullStory: article.summary,
+            url: article.url
+          }));
+          
+          setNewsStories(formattedArticles);
+        }
+      } catch (error) {
+        console.error('Error fetching news articles:', error);
+        // Keep using mock data if fetch fails
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
   if (showSplash) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
@@ -45,7 +78,13 @@ const HomePage = () => {
       
       {/* Main content */}
       <div className="flex-1 overflow-hidden">
-        <NewsStorySlider stories={mockNews} />
+        {loading ? (
+          <div className="flex justify-center items-center h-full">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <NewsStorySlider stories={newsStories} />
+        )}
       </div>
       
       {/* Bottom nav is handled by App.tsx */}

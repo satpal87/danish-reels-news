@@ -9,7 +9,7 @@ import { getNewsArticles } from '@/services/mongoDbService';
 import { toast } from "@/components/ui/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ThumbsUp, ThumbsDown, Bookmark, Share } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const HomePage = () => {
@@ -18,6 +18,9 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  
+  // Add state for liked/disliked articles
+  const [interactions, setInteractions] = useState<Record<string, { liked?: boolean, disliked?: boolean, saved?: boolean }>>({});
   
   useEffect(() => {
     // Check if user has completed onboarding
@@ -72,14 +75,62 @@ const HomePage = () => {
     fetchArticles();
   }, []);
 
+  // Handle user interactions
+  const handleLike = (storyId: string) => {
+    setInteractions(prev => ({
+      ...prev,
+      [storyId]: { 
+        ...prev[storyId], 
+        liked: !prev[storyId]?.liked, 
+        disliked: false 
+      }
+    }));
+    
+    toast({
+      title: "Article liked",
+      description: "Your feedback helps us curate better content for you.",
+    });
+  };
+  
+  const handleDislike = (storyId: string) => {
+    setInteractions(prev => ({
+      ...prev,
+      [storyId]: { 
+        ...prev[storyId], 
+        disliked: !prev[storyId]?.disliked, 
+        liked: false
+      }
+    }));
+    
+    toast({
+      title: "Article disliked",
+      description: "Your feedback helps us curate better content for you.",
+    });
+  };
+  
+  const handleSave = (storyId: string) => {
+    setInteractions(prev => ({
+      ...prev,
+      [storyId]: { 
+        ...prev[storyId], 
+        saved: !prev[storyId]?.saved 
+      }
+    }));
+    
+    toast({
+      title: "Article saved",
+      description: "You can find this article in your saved stories.",
+    });
+  };
+
   if (showSplash) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="p-4 flex justify-between items-center bg-card border-b border-border h-16">
+      <header className="p-4 flex justify-between items-center bg-card border-b border-border h-16 fixed top-0 w-full z-10">
         <Logo size="medium" />
         <div className="flex items-center">
           <button className="bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-full px-3 py-1 text-sm font-medium">
@@ -89,7 +140,7 @@ const HomePage = () => {
       </header>
       
       {/* Main content */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden mt-16">
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
@@ -120,13 +171,41 @@ const HomePage = () => {
                       <CardContent className="p-5">
                         <h2 className="text-xl font-bold mb-2 line-clamp-2">{story.title}</h2>
                         <p className="text-muted-foreground mb-4 line-clamp-3">{story.summary}</p>
-                        <Button 
-                          onClick={() => window.open(story.url, '_blank', 'noopener,noreferrer')}
-                          variant="outline"
-                          className="w-full mt-2"
-                        >
-                          Read More <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
+                        <div className="flex justify-between items-center mt-4">
+                          <div className="flex space-x-2">
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className={interactions[story.id]?.liked ? "text-primary" : ""}
+                              onClick={() => handleLike(story.id)}
+                            >
+                              <ThumbsUp size={18} />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className={interactions[story.id]?.disliked ? "text-destructive" : ""}
+                              onClick={() => handleDislike(story.id)}
+                            >
+                              <ThumbsDown size={18} />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className={interactions[story.id]?.saved ? "text-primary" : ""}
+                              onClick={() => handleSave(story.id)}
+                            >
+                              <Bookmark size={18} />
+                            </Button>
+                          </div>
+                          <Button 
+                            onClick={() => window.open(story.url, '_blank', 'noopener,noreferrer')}
+                            variant="outline"
+                            size="sm"
+                          >
+                            Read More <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   ))}

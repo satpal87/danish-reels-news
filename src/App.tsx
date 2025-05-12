@@ -11,7 +11,7 @@ import SavedPage from "./pages/SavedPage";
 import SettingsPage from "./pages/SettingsPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import NotFound from "./pages/NotFound";
-import BottomNav from "./components/BottomNav";
+import MainNavigation from "./components/MainNavigation";
 import { useIsMobile } from './hooks/use-mobile';
 
 const queryClient = new QueryClient();
@@ -20,7 +20,7 @@ const AppContent = () => {
   const isMobile = useIsMobile();
   
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen pb-16 md:pb-0 md:pt-16">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/search" element={<SearchPage />} />
@@ -31,8 +31,8 @@ const AppContent = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
       
-      {/* Bottom navigation bar - only show on mobile */}
-      {isMobile && <BottomNav />}
+      {/* Replace BottomNav with our new MainNavigation */}
+      <MainNavigation />
     </div>
   );
 };

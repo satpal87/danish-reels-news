@@ -1,6 +1,4 @@
-
 import { useEffect, useState } from 'react';
-import NewsStorySlider from '@/components/NewsStorySlider';
 import { mockNews } from '@/data/mockData';
 import Logo from '@/components/Logo';
 import SplashScreen from '@/components/SplashScreen';
@@ -8,19 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import { getNewsArticles } from '@/services/mongoDbService';
 import { toast } from "@/components/ui/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, ThumbsUp, ThumbsDown, Bookmark, Share } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { News } from '@/components/ui/sidebar-news';
+import { Feature } from '@/components/ui/feature-section-with-grid';
 
 const HomePage = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [newsStories, setNewsStories] = useState(mockNews);
   const [loading, setLoading] = useState(true);
-  const isMobile = useIsMobile();
+  const { isMobile } = useIsMobile();
   const navigate = useNavigate();
-  
-  // Add state for liked/disliked articles
-  const [interactions, setInteractions] = useState<Record<string, { liked?: boolean, disliked?: boolean, saved?: boolean }>>({});
   
   useEffect(() => {
     // Check if user has completed onboarding
@@ -75,56 +69,24 @@ const HomePage = () => {
     fetchArticles();
   }, []);
 
-  // Handle user interactions
-  const handleLike = (storyId: string) => {
-    setInteractions(prev => ({
-      ...prev,
-      [storyId]: { 
-        ...prev[storyId], 
-        liked: !prev[storyId]?.liked, 
-        disliked: false 
-      }
-    }));
-    
-    toast({
-      title: "Article liked",
-      description: "Your feedback helps us curate better content for you.",
-    });
-  };
-  
-  const handleDislike = (storyId: string) => {
-    setInteractions(prev => ({
-      ...prev,
-      [storyId]: { 
-        ...prev[storyId], 
-        disliked: !prev[storyId]?.disliked, 
-        liked: false
-      }
-    }));
-    
-    toast({
-      title: "Article disliked",
-      description: "Your feedback helps us curate better content for you.",
-    });
-  };
-  
-  const handleSave = (storyId: string) => {
-    setInteractions(prev => ({
-      ...prev,
-      [storyId]: { 
-        ...prev[storyId], 
-        saved: !prev[storyId]?.saved 
-      }
-    }));
-    
-    toast({
-      title: "Article saved",
-      description: "You can find this article in your saved stories.",
-    });
-  };
+  // Convert our news data format to the format expected by the News component
+  const sidebarNewsArticles = newsStories.map(story => ({
+    href: story.url || "#",
+    title: story.title,
+    summary: story.summary,
+    image: story.imageUrl
+  }));
 
   if (showSplash) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
@@ -141,78 +103,12 @@ const HomePage = () => {
       
       {/* Main content */}
       <div className="flex-1 overflow-hidden mt-16">
-        {loading ? (
-          <div className="flex justify-center items-center h-full">
-            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+        {isMobile ? (
+          <div className="h-[calc(100vh-16rem)] w-full max-w-sm mx-auto relative z-0">
+            <News articles={sidebarNewsArticles} />
           </div>
         ) : (
-          <>
-            {isMobile ? (
-              <NewsStorySlider stories={newsStories} />
-            ) : (
-              <div className="container mx-auto py-8 px-4">
-                <h1 className="text-3xl font-bold mb-6">Danish News</h1>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {newsStories.map((story) => (
-                    <Card key={story.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                      <div className="aspect-video relative">
-                        <img 
-                          src={story.imageUrl} 
-                          alt={story.title} 
-                          className="object-cover w-full h-full"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = 'https://placehold.co/600x400?text=No+Image';
-                          }}
-                        />
-                        <div className="absolute top-2 left-2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium">
-                          {story.category}
-                        </div>
-                      </div>
-                      <CardContent className="p-5">
-                        <h2 className="text-xl font-bold mb-2 line-clamp-2">{story.title}</h2>
-                        <p className="text-muted-foreground mb-4 line-clamp-3">{story.summary}</p>
-                        <div className="flex justify-between items-center mt-4">
-                          <div className="flex space-x-2">
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              className={interactions[story.id]?.liked ? "text-primary" : ""}
-                              onClick={() => handleLike(story.id)}
-                            >
-                              <ThumbsUp size={18} />
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              className={interactions[story.id]?.disliked ? "text-destructive" : ""}
-                              onClick={() => handleDislike(story.id)}
-                            >
-                              <ThumbsDown size={18} />
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              className={interactions[story.id]?.saved ? "text-primary" : ""}
-                              onClick={() => handleSave(story.id)}
-                            >
-                              <Bookmark size={18} />
-                            </Button>
-                          </div>
-                          <Button 
-                            onClick={() => window.open(story.url, '_blank', 'noopener,noreferrer')}
-                            variant="outline"
-                            size="sm"
-                          >
-                            Read More <ArrowRight className="ml-2 h-4 w-4" />
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            )}
-          </>
+          <Feature news={newsStories} />
         )}
       </div>
     </div>

@@ -39,7 +39,8 @@ export function News({ articles }: { articles: NewsArticle[] }) {
       data-active={cardCount !== 0}
     >
       <div className="relative size-full">
-        {cards.toReversed().map(({ href, title, summary, image }, idx) => (
+        {/* Using slice().reverse() as a cross-compatible alternative to toReversed() */}
+        {cards.slice().reverse().map(({ href, title, summary, image }, idx) => (
           <div
             key={href}
             className={cn(

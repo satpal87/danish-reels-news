@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { mockNews } from '@/data/mockData';
 import Logo from '@/components/Logo';
@@ -13,7 +14,7 @@ const HomePage = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [newsStories, setNewsStories] = useState(mockNews);
   const [loading, setLoading] = useState(true);
-  const { isMobile } = useIsMobile();
+  const isMobile = useIsMobile(); // Fix: useIsMobile() now returns a boolean directly
   const navigate = useNavigate();
   
   useEffect(() => {

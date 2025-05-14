@@ -1,20 +1,19 @@
 
 import { useEffect, useState } from 'react';
-import { mockNews } from '@/data/mockData';
 import Logo from '@/components/Logo';
 import SplashScreen from '@/components/SplashScreen';
 import { useNavigate } from 'react-router-dom';
-import { getNewsArticles } from '@/services/mongoDbService';
 import { toast } from "@/components/ui/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { News } from '@/components/ui/sidebar-news';
 import { Feature } from '@/components/ui/feature-section-with-grid';
+import { getNewsArticles } from '@/services/newsService';
 
 const HomePage = () => {
   const [showSplash, setShowSplash] = useState(true);
-  const [newsStories, setNewsStories] = useState(mockNews);
+  const [newsStories, setNewsStories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const isMobile = useIsMobile(); // Fix: useIsMobile() now returns a boolean directly
+  const isMobile = useIsMobile();
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -42,14 +41,14 @@ const HomePage = () => {
         
         if (articles && articles.length > 0) {
           // Convert articles to the format expected by NewsStorySlider
-          const formattedArticles = articles.map((article, index) => ({
-            id: index.toString(),
+          const formattedArticles = articles.map((article) => ({
+            id: article.id,
             title: article.title,
-            summary: article.summary,
-            category: 'Top News', // Default category
-            imageUrl: article.image,
-            fullStory: article.summary,
-            url: article.url
+            summary: article.summary || article.summary_txt || '',
+            category: article.category || 'Top News',
+            imageUrl: article.image || 'https://placehold.co/600x400?text=No+Image',
+            fullStory: article.html || article.summary,
+            url: ''
           }));
           
           setNewsStories(formattedArticles);
@@ -61,7 +60,6 @@ const HomePage = () => {
           description: "Could not load the latest news articles.",
           variant: "destructive"
         });
-        // Keep using mock data if fetch fails
       } finally {
         setLoading(false);
       }
@@ -95,9 +93,15 @@ const HomePage = () => {
       {/* Header */}
       <header className="p-4 flex justify-between items-center bg-card border-b border-border h-16 fixed top-0 w-full z-10">
         <Logo size="medium" />
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <button className="bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-full px-3 py-1 text-sm font-medium">
             EN
+          </button>
+          <button 
+            className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-3 py-1 text-sm font-medium"
+            onClick={() => navigate('/admin')}
+          >
+            Admin
           </button>
         </div>
       </header>

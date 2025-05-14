@@ -12,6 +12,7 @@ import SettingsPage from "./pages/SettingsPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import NotFound from "./pages/NotFound";
 import MainNavigation from "./components/MainNavigation";
+import AdminPage from "./pages/AdminPage";
 import { useIsMobile } from './hooks/use-mobile';
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const AppContent = () => {
         <Route path="/saved" element={<SavedPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       

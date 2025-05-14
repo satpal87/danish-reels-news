@@ -21,17 +21,21 @@ const AppContent = () => {
   const isMobile = useIsMobile();
   
   return (
-    <div className="relative min-h-screen pb-16 md:pb-0 md:pt-16">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/article/:id" element={<ArticlePage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/categories" element={<CategoriesPage />} />
-        <Route path="/saved" element={<SavedPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+    <div className="relative min-h-screen">
+      {!isMobile && <MainNavigation />}
+      
+      <div className={`${!isMobile ? 'pt-16' : ''} pb-16`}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/article/:id" element={<ArticlePage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/categories" element={<CategoriesPage />} />
+          <Route path="/saved" element={<SavedPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
       
       {isMobile && <MainNavigation />}
     </div>

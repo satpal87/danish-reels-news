@@ -2,11 +2,13 @@
 import { useEffect, useState } from 'react';
 import Logo from '@/components/Logo';
 import { toast } from "@/components/ui/use-toast";
-import { Bell } from 'lucide-react';
+import { Bell, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getNewsArticles, NewsArticle } from '@/services/newsService';
 import SearchBar from '@/components/SearchBar';
 import { formatPublishedDate } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 const HomePage = () => {
   const [news, setNews] = useState<NewsArticle[]>([]);
@@ -28,7 +30,8 @@ const HomePage = () => {
             (b.rate || 0) - (a.rate || 0)
           );
           
-          setTrendingNews(sortedByRate.slice(0, 1));
+          // Get top 10 trending articles
+          setTrendingNews(sortedByRate.slice(0, 10));
           setNews(articles);
         } else {
           console.log('No articles returned or empty array');
@@ -66,7 +69,10 @@ const HomePage = () => {
       <header className="sticky top-0 p-4 bg-black border-b border-neutral-800 z-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Logo size="medium" />
+            <div className="text-2xl font-bold">
+              <span className="text-red-600">danish</span>
+              <span className="text-gray-300">news</span>
+            </div>
           </div>
           <div className="h-10 w-10 flex items-center justify-center bg-neutral-800 rounded-lg">
             <Bell size={20} />
@@ -89,53 +95,61 @@ const HomePage = () => {
           </div>
         ) : (
           <>
-            {/* Trending */}
+            {/* Trending - Horizontally Scrollable */}
             <div className="px-4 mb-6">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold">Trending</h2>
                 <button 
-                  className="text-sm text-blue-500"
+                  className="flex items-center text-sm text-blue-500"
                   onClick={() => navigate('/categories')}
                 >
                   See all
+                  <ChevronRight className="w-4 h-4 ml-1" />
                 </button>
               </div>
               
-              <div className="space-y-4">
-                {trendingNews.length > 0 ? (
-                  trendingNews.map(article => (
-                    <div 
-                      key={article.id}
-                      onClick={() => navigate(`/article/${article.id}`)}
-                      className="relative rounded-xl overflow-hidden cursor-pointer"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/10" />
-                      <img 
-                        src={article.image || 'https://placehold.co/600x400?text=No+Image'} 
-                        alt={article.title_en || article.title}
-                        className="w-full aspect-[16/9] object-cover"
-                      />
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <div className="bg-blue-600 text-white text-xs px-2 py-1 rounded inline-block mb-2">
-                          {article.category || "News"}
+              <Carousel className="w-full">
+                <CarouselContent className="-ml-2">
+                  {trendingNews.length > 0 ? (
+                    trendingNews.map((article) => (
+                      <CarouselItem key={article.id} className="pl-2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                        <div 
+                          onClick={() => navigate(`/article/${article.id}`)}
+                          className="relative rounded-xl overflow-hidden cursor-pointer h-48"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/10" />
+                          <img 
+                            src={article.image || 'https://placehold.co/600x400?text=No+Image'} 
+                            alt={article.title_en || article.title}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute bottom-0 left-0 right-0 p-3">
+                            <div className="bg-blue-600 text-white text-xs px-2 py-1 rounded inline-block mb-1">
+                              {article.category || "News"}
+                            </div>
+                            <h3 className="font-semibold text-sm text-white mb-1 line-clamp-2">
+                              {article.title_en || article.title}
+                            </h3>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs text-gray-400">
+                                {formatPublishedDate(article.published_date)}
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                        <h3 className="font-bold text-lg text-white mb-2">
-                          {article.title_en || article.title}
-                        </h3>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-xs text-gray-400">
-                            {formatPublishedDate(article.published_date)}
-                          </span>
-                        </div>
+                      </CarouselItem>
+                    ))
+                  ) : (
+                    <CarouselItem className="pl-2 basis-full">
+                      <div className="text-center py-6 bg-neutral-900 rounded-lg">
+                        <p>No trending articles</p>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-6 bg-neutral-900 rounded-lg">
-                    <p>No trending articles</p>
-                  </div>
-                )}
-              </div>
+                    </CarouselItem>
+                  )}
+                </CarouselContent>
+                <CarouselPrevious className="left-1" />
+                <CarouselNext className="right-1" />
+              </Carousel>
             </div>
             
             {/* Latest */}
@@ -143,23 +157,24 @@ const HomePage = () => {
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold">Latest</h2>
                 <button 
-                  className="text-sm text-blue-500"
+                  className="flex items-center text-sm text-blue-500"
                   onClick={() => navigate('/categories')}
                 >
                   See all
+                  <ChevronRight className="w-4 h-4 ml-1" />
                 </button>
               </div>
               
-              {/* Categories Tabs */}
-              <div className="mb-4 overflow-x-auto hide-scrollbar">
+              {/* Categories Tabs - Horizontally scrollable */}
+              <ScrollArea className="w-full whitespace-nowrap">
                 <div className="flex space-x-4 pb-2">
                   {categories.map(category => (
                     <button 
                       key={category}
-                      className={`text-sm px-2 py-1 ${
+                      className={`text-sm px-3 py-1.5 ${
                         activeCategory === category 
                           ? 'border-b-2 border-blue-600 text-blue-600' 
-                          : ''
+                          : 'text-gray-400 hover:text-gray-300'
                       }`}
                       onClick={() => setActiveCategory(category)}
                     >
@@ -167,9 +182,9 @@ const HomePage = () => {
                     </button>
                   ))}
                 </div>
-              </div>
+              </ScrollArea>
               
-              <div className="space-y-6">
+              <div className="space-y-6 mt-4">
                 {filteredNews.length > 0 ? (
                   filteredNews.map(article => (
                     <div 

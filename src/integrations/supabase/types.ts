@@ -26,6 +26,7 @@ export type Database = {
           summary_txt: string | null
           title: string
           title_en: string | null
+          url: string | null
         }
         Insert: {
           active?: boolean | null
@@ -43,6 +44,7 @@ export type Database = {
           summary_txt?: string | null
           title: string
           title_en?: string | null
+          url?: string | null
         }
         Update: {
           active?: boolean | null
@@ -60,6 +62,7 @@ export type Database = {
           summary_txt?: string | null
           title?: string
           title_en?: string | null
+          url?: string | null
         }
         Relationships: []
       }

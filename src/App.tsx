@@ -31,7 +31,7 @@ const AppContent = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
       
-      <MainNavigation />
+      {isMobile && <MainNavigation />}
     </div>
   );
 };

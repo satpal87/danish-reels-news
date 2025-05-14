@@ -12,6 +12,7 @@ import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 import MainNavigation from "./components/MainNavigation";
 import AdminPage from "./pages/AdminPage";
+import ArticlePage from "./pages/ArticlePage";
 import { useIsMobile } from './hooks/use-mobile';
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const AppContent = () => {
     <div className="relative min-h-screen pb-16 md:pb-0 md:pt-16">
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/article/:id" element={<ArticlePage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/categories" element={<CategoriesPage />} />
         <Route path="/saved" element={<SavedPage />} />

@@ -8,6 +8,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { News } from '@/components/ui/sidebar-news';
 import { Feature } from '@/components/ui/feature-section-with-grid';
 import { getNewsArticles } from '@/services/newsService';
+import NewsStorySlider from '@/components/NewsStorySlider';
 
 const HomePage = () => {
   const [showSplash, setShowSplash] = useState(true);
@@ -38,6 +39,7 @@ const HomePage = () => {
       try {
         setLoading(true);
         const articles = await getNewsArticles();
+        console.log('Fetched articles:', articles);
         
         if (articles && articles.length > 0) {
           // Convert articles to the format expected by NewsStorySlider
@@ -52,6 +54,9 @@ const HomePage = () => {
           }));
           
           setNewsStories(formattedArticles);
+          console.log('Formatted articles:', formattedArticles);
+        } else {
+          console.log('No articles returned or empty array');
         }
       } catch (error) {
         console.error('Error fetching news articles:', error);
@@ -110,10 +115,22 @@ const HomePage = () => {
       <div className="flex-1 overflow-hidden mt-16">
         {isMobile ? (
           <div className="h-[calc(100vh-16rem)] w-full max-w-sm mx-auto relative z-0">
-            <News articles={sidebarNewsArticles} />
+            {newsStories.length > 0 ? (
+              <News articles={sidebarNewsArticles} />
+            ) : (
+              <div className="flex justify-center items-center h-full">
+                <p className="text-muted-foreground">No news articles available</p>
+              </div>
+            )}
           </div>
         ) : (
-          <Feature news={newsStories} />
+          newsStories.length > 0 ? (
+            <Feature news={newsStories} />
+          ) : (
+            <div className="flex justify-center items-center h-[calc(100vh-16rem)]">
+              <p className="text-muted-foreground">No news articles available</p>
+            </div>
+          )
         )}
       </div>
     </div>

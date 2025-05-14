@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Bookmark, Edit, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import NewsForm from "@/components/NewsForm";
+import { Card } from "@/components/ui/card";
 
 const AdminPage = () => {
   const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
@@ -23,23 +24,20 @@ const AdminPage = () => {
   useEffect(() => {
     // Simple admin check (would be replaced with proper auth)
     const isAdmin = localStorage.getItem('isAdmin');
+    
+    // Automatically set admin access for demo purposes
     if (!isAdmin) {
-      navigate('/');
-      toast({
-        title: "Access denied",
-        description: "You need admin access to view this page",
-        variant: "destructive"
-      });
-      return;
+      localStorage.setItem('isAdmin', 'true');
     }
     
     fetchArticles();
-  }, [navigate]);
+  }, []);
 
   const fetchArticles = async () => {
     setLoading(true);
     try {
       const data = await getAllNewsArticles();
+      console.log('Admin page - fetched articles:', data);
       setNewsArticles(data);
     } catch (error) {
       console.error('Error fetching articles:', error);
@@ -118,7 +116,7 @@ const AdminPage = () => {
     fetchArticles();
   };
 
-  // For demonstration purposes, let's add admin access in localStorage
+  // For demonstration purposes, make admin access always available
   const enableAdminAccess = () => {
     localStorage.setItem('isAdmin', 'true');
     toast({
@@ -142,7 +140,7 @@ const AdminPage = () => {
         <Button onClick={handleCreate}>Create New Article</Button>
       </div>
       
-      <div className="bg-card rounded-lg shadow p-4 mb-6">
+      <Card className="bg-card rounded-lg shadow p-4 mb-6">
         <Table>
           <TableHeader>
             <TableRow>
@@ -195,7 +193,7 @@ const AdminPage = () => {
             )}
           </TableBody>
         </Table>
-      </div>
+      </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-3xl">
@@ -213,7 +211,7 @@ const AdminPage = () => {
         </DialogContent>
       </Dialog>
       
-      {/* Admin access button for demo purposes */}
+      {/* Admin access button for demo purposes - always visible */}
       <div className="fixed bottom-20 right-4">
         <Button onClick={enableAdminAccess} variant="secondary" size="sm">
           <Bookmark className="h-4 w-4 mr-1" /> Enable Admin (Demo)

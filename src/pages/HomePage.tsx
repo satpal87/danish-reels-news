@@ -2,37 +2,24 @@
 import { useEffect, useState } from 'react';
 import Logo from '@/components/Logo';
 import SplashScreen from '@/components/SplashScreen';
-import { useNavigate } from 'react-router-dom';
 import { toast } from "@/components/ui/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { News } from '@/components/ui/sidebar-news';
 import { Feature } from '@/components/ui/feature-section-with-grid';
 import { getNewsArticles } from '@/services/newsService';
-import NewsStorySlider from '@/components/NewsStorySlider';
 
 const HomePage = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [newsStories, setNewsStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const isMobile = useIsMobile();
-  const navigate = useNavigate();
   
   useEffect(() => {
-    // Check if user has completed onboarding
-    const onboardingCompleted = localStorage.getItem('onboardingCompleted');
-    if (!onboardingCompleted) {
-      // Redirect to onboarding after splash screen
-      setTimeout(() => {
-        setShowSplash(false);
-        navigate('/onboarding');
-      }, 2500);
-    } else {
-      // Just show splash and then home
-      setTimeout(() => {
-        setShowSplash(false);
-      }, 2500);
-    }
-  }, [navigate]);
+    // Just show splash for 2 seconds then home
+    setTimeout(() => {
+      setShowSplash(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -42,12 +29,12 @@ const HomePage = () => {
         console.log('Fetched articles:', articles);
         
         if (articles && articles.length > 0) {
-          // Convert articles to the format expected by NewsStorySlider
+          // Convert articles to the format expected by the news components
           const formattedArticles = articles.map((article) => ({
             id: article.id,
             title: article.title,
             summary: article.summary || article.summary_txt || '',
-            category: article.category || 'Top News',
+            category: article.category || 'News',
             imageUrl: article.image || 'https://placehold.co/600x400?text=No+Image',
             fullStory: article.html || article.summary,
             url: ''
@@ -57,6 +44,10 @@ const HomePage = () => {
           console.log('Formatted articles:', formattedArticles);
         } else {
           console.log('No articles returned or empty array');
+          toast({
+            title: "No news articles",
+            description: "There are currently no news articles to display.",
+          });
         }
       } catch (error) {
         console.error('Error fetching news articles:', error);
@@ -70,8 +61,10 @@ const HomePage = () => {
       }
     };
 
-    fetchArticles();
-  }, []);
+    if (!showSplash) {
+      fetchArticles();
+    }
+  }, [showSplash]);
 
   // Convert our news data format to the format expected by the News component
   const sidebarNewsArticles = newsStories.map(story => ({
@@ -104,7 +97,7 @@ const HomePage = () => {
           </button>
           <button 
             className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-3 py-1 text-sm font-medium"
-            onClick={() => navigate('/admin')}
+            onClick={() => window.location.href = '/admin'}
           >
             Admin
           </button>
@@ -112,25 +105,17 @@ const HomePage = () => {
       </header>
       
       {/* Main content */}
-      <div className="flex-1 overflow-hidden mt-16">
-        {isMobile ? (
-          <div className="h-[calc(100vh-16rem)] w-full max-w-sm mx-auto relative z-0">
-            {newsStories.length > 0 ? (
-              <News articles={sidebarNewsArticles} />
-            ) : (
-              <div className="flex justify-center items-center h-full">
-                <p className="text-muted-foreground">No news articles available</p>
-              </div>
-            )}
+      <div className="flex-1 overflow-auto mt-16 pb-16">
+        {newsStories.length === 0 ? (
+          <div className="flex justify-center items-center h-[calc(100vh-16rem)]">
+            <p className="text-muted-foreground">No news articles available</p>
+          </div>
+        ) : isMobile ? (
+          <div className="w-full max-w-sm mx-auto">
+            <News articles={sidebarNewsArticles} />
           </div>
         ) : (
-          newsStories.length > 0 ? (
-            <Feature news={newsStories} />
-          ) : (
-            <div className="flex justify-center items-center h-[calc(100vh-16rem)]">
-              <p className="text-muted-foreground">No news articles available</p>
-            </div>
-          )
+          <Feature news={newsStories} />
         )}
       </div>
     </div>

@@ -59,7 +59,7 @@ const Gallery4 = ({
   useEffect(() => {
     if (!carouselApi || isPaused || items.length <= 1) return;
     
-    const autoScrollInterval = setInterval(() => {
+    const interval = setInterval(() => {
       if (canScrollNext) {
         carouselApi.scrollNext();
       } else {
@@ -67,7 +67,7 @@ const Gallery4 = ({
       }
     }, autoScrollInterval); // Use the prop value
     
-    return () => clearInterval(autoScrollInterval);
+    return () => clearInterval(interval);
   }, [carouselApi, canScrollNext, items.length, isPaused, autoScrollInterval]);
 
   // Pause auto-scroll when user hovers over the carousel

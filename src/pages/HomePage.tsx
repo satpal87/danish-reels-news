@@ -8,10 +8,13 @@ import SearchBar from '@/components/SearchBar';
 import { formatPublishedDate } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TrendingNewsGallery } from '@/components/blocks/TrendingNewsGallery';
+import { CategoryNewsGallery } from '@/components/blocks/CategoryNewsGallery';
 
 const HomePage = () => {
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [trendingNews, setTrendingNews] = useState<NewsArticle[]>([]);
+  const [sportsNews, setSportsNews] = useState<NewsArticle[]>([]);
+  const [localNews, setLocalNews] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All");
   const navigate = useNavigate();
@@ -31,6 +34,18 @@ const HomePage = () => {
           
           // Get top 10 trending articles
           setTrendingNews(sortedByRate.slice(0, 10));
+          
+          // Filter sports and local news
+          const sportsArticles = articles.filter(article => 
+            article.category?.toLowerCase() === 'sports'
+          ).slice(0, 10);
+          
+          const localArticles = articles.filter(article => 
+            article.category?.toLowerCase() === 'local'
+          ).slice(0, 10);
+          
+          setSportsNews(sportsArticles);
+          setLocalNews(localArticles);
           setNews(articles);
         } else {
           console.log('No articles returned or empty array');
@@ -95,9 +110,31 @@ const HomePage = () => {
         ) : (
           <>
             {/* Trending - Gallery4 carousel */}
-            <div className="mb-6">
+            <div>
               <TrendingNewsGallery trendingNews={trendingNews} />
             </div>
+            
+            {/* Sports News Section */}
+            {sportsNews.length > 0 && (
+              <div className="mb-4">
+                <CategoryNewsGallery 
+                  title="Sports" 
+                  articles={sportsNews} 
+                  description="Latest sports stories and updates"
+                />
+              </div>
+            )}
+            
+            {/* Local News Section */}
+            {localNews.length > 0 && (
+              <div className="mb-4">
+                <CategoryNewsGallery 
+                  title="Local" 
+                  articles={localNews} 
+                  description="What's happening in your area"
+                />
+              </div>
+            )}
             
             {/* Latest */}
             <div className="px-4 mb-6">

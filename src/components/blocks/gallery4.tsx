@@ -24,17 +24,20 @@ export interface Gallery4Props {
   title?: string;
   description?: string;
   items: Gallery4Item[];
+  autoScrollInterval?: number; // Add auto-scroll interval prop
 }
 
 const Gallery4 = ({
   title = "Case Studies",
   description = "Discover how leading companies and developers are leveraging modern web technologies to build exceptional digital experiences. These case studies showcase real-world applications and success stories.",
   items,
+  autoScrollInterval = 5000, // Default to 5 seconds
 }: Gallery4Props) => {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     if (!carouselApi) {
@@ -52,9 +55,9 @@ const Gallery4 = ({
     };
   }, [carouselApi]);
 
-  // Auto-scroll effect
+  // Auto-scroll effect with configurable interval
   useEffect(() => {
-    if (!carouselApi) return;
+    if (!carouselApi || isPaused || items.length <= 1) return;
     
     const autoScrollInterval = setInterval(() => {
       if (canScrollNext) {
@@ -62,13 +65,17 @@ const Gallery4 = ({
       } else {
         carouselApi.scrollTo(0);
       }
-    }, 5000); // 5 seconds interval
+    }, autoScrollInterval); // Use the prop value
     
     return () => clearInterval(autoScrollInterval);
-  }, [carouselApi, canScrollNext]);
+  }, [carouselApi, canScrollNext, items.length, isPaused, autoScrollInterval]);
+
+  // Pause auto-scroll when user hovers over the carousel
+  const handleMouseEnter = () => setIsPaused(true);
+  const handleMouseLeave = () => setIsPaused(false);
 
   return (
-    <section className="py-4">
+    <section className="py-4" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="container mx-auto">
         <div className="mb-4 flex items-end justify-between">
           <div className="flex flex-col gap-2">

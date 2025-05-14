@@ -1,18 +1,16 @@
 
-import { useNavigate } from 'react-router-dom';
 import { Gallery4, Gallery4Item } from '@/components/blocks/gallery4';
 import { NewsArticle } from '@/services/newsService';
 import { formatPublishedDate } from '@/lib/utils';
 
 interface TrendingNewsGalleryProps {
   trendingNews: NewsArticle[];
+  autoScrollInterval?: number; // in milliseconds
 }
 
-export function TrendingNewsGallery({ trendingNews }: TrendingNewsGalleryProps) {
-  const navigate = useNavigate();
-
-  // Convert news articles to Gallery4Item format
-  const galleryItems: Gallery4Item[] = trendingNews.map((article) => ({
+export function TrendingNewsGallery({ trendingNews, autoScrollInterval = 5000 }: TrendingNewsGalleryProps) {
+  // Convert trending news to Gallery4 format
+  const trendingItems: Gallery4Item[] = trendingNews.map(article => ({
     id: article.id,
     title: article.title_en || article.title,
     description: article.summary_txt || article.summary || formatPublishedDate(article.published_date),
@@ -20,27 +18,23 @@ export function TrendingNewsGallery({ trendingNews }: TrendingNewsGalleryProps) 
     image: article.image || 'https://placehold.co/600x400?text=No+Image'
   }));
 
-  // Use blank items if no trending news available
-  const items = galleryItems.length > 0 ? galleryItems : [
+  // Use blank items if no trending news
+  const items = trendingItems.length > 0 ? trendingItems : [
     {
       id: 'blank',
       title: 'No trending news available',
       description: 'Check back later for trending stories',
       href: '#',
-      image: 'https://placehold.co/600x400?text=No+News'
+      image: 'https://placehold.co/600x400?text=No+Trending+News'
     }
   ];
 
-  // Handle item click rather than using direct links
-  const handleItemClick = (articleId: string) => {
-    navigate(`/article/${articleId}`);
-  };
-
   return (
-    <Gallery4 
+    <Gallery4
       title="Trending"
-      description=""
+      description="Popular stories that are making headlines"
       items={items}
+      autoScrollInterval={autoScrollInterval}
     />
   );
 }

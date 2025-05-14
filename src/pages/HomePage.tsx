@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { getNewsArticles, NewsArticle } from '@/services/newsService';
 import SearchBar from '@/components/SearchBar';
 import { formatPublishedDate } from '@/lib/utils';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { TrendingNewsGallery } from '@/components/blocks/TrendingNewsGallery';
 import { CategoryNewsGallery } from '@/components/blocks/CategoryNewsGallery';
 
@@ -15,8 +14,9 @@ const HomePage = () => {
   const [trendingNews, setTrendingNews] = useState<NewsArticle[]>([]);
   const [sportsNews, setSportsNews] = useState<NewsArticle[]>([]);
   const [localNews, setLocalNews] = useState<NewsArticle[]>([]);
+  const [businessNews, setBusinessNews] = useState<NewsArticle[]>([]);
+  const [techNews, setTechNews] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState("All");
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -35,7 +35,7 @@ const HomePage = () => {
           // Get top 10 trending articles
           setTrendingNews(sortedByRate.slice(0, 10));
           
-          // Filter sports and local news
+          // Filter news by categories
           const sportsArticles = articles.filter(article => 
             article.category?.toLowerCase() === 'sports'
           ).slice(0, 10);
@@ -44,8 +44,18 @@ const HomePage = () => {
             article.category?.toLowerCase() === 'local'
           ).slice(0, 10);
           
+          const businessArticles = articles.filter(article => 
+            article.category?.toLowerCase() === 'business'
+          ).slice(0, 10);
+          
+          const technologyArticles = articles.filter(article => 
+            article.category?.toLowerCase() === 'technology'
+          ).slice(0, 10);
+          
           setSportsNews(sportsArticles);
           setLocalNews(localArticles);
+          setBusinessNews(businessArticles);
+          setTechNews(technologyArticles);
           setNews(articles);
         } else {
           console.log('No articles returned or empty array');
@@ -68,14 +78,6 @@ const HomePage = () => {
 
     fetchArticles();
   }, []);
-
-  // Filter news by category
-  const filteredNews = activeCategory === "All" 
-    ? news 
-    : news.filter(article => article.category === activeCategory);
-
-  // Get unique categories
-  const categories = ["All", ...new Set(news.map(article => article.category).filter(Boolean) as string[])];
 
   return (
     <div className="flex flex-col min-h-screen bg-black text-white">
@@ -111,7 +113,10 @@ const HomePage = () => {
           <>
             {/* Trending - Gallery4 carousel */}
             <div>
-              <TrendingNewsGallery trendingNews={trendingNews} />
+              <TrendingNewsGallery 
+                trendingNews={trendingNews}
+                autoScrollInterval={5000} // 5 seconds
+              />
             </div>
             
             {/* Sports News Section */}
@@ -121,6 +126,7 @@ const HomePage = () => {
                   title="Sports" 
                   articles={sportsNews} 
                   description="Latest sports stories and updates"
+                  autoScrollInterval={7000} // 7 seconds
                 />
               </div>
             )}
@@ -132,11 +138,36 @@ const HomePage = () => {
                   title="Local" 
                   articles={localNews} 
                   description="What's happening in your area"
+                  autoScrollInterval={10000} // 10 seconds
                 />
               </div>
             )}
             
-            {/* Latest */}
+            {/* Business News Section */}
+            {businessNews.length > 0 && (
+              <div className="mb-4">
+                <CategoryNewsGallery 
+                  title="Business" 
+                  articles={businessNews} 
+                  description="Latest business and financial updates"
+                  autoScrollInterval={8000} // 8 seconds
+                />
+              </div>
+            )}
+            
+            {/* Technology News Section */}
+            {techNews.length > 0 && (
+              <div className="mb-4">
+                <CategoryNewsGallery 
+                  title="Technology" 
+                  articles={techNews} 
+                  description="Updates from the world of technology"
+                  autoScrollInterval={6000} // 6 seconds
+                />
+              </div>
+            )}
+            
+            {/* Latest News - Simple List */}
             <div className="px-4 mb-6">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold">Latest</h2>
@@ -149,28 +180,9 @@ const HomePage = () => {
                 </button>
               </div>
               
-              {/* Categories Tabs - Horizontally scrollable */}
-              <ScrollArea className="w-full whitespace-nowrap">
-                <div className="flex space-x-4 pb-2">
-                  {categories.map(category => (
-                    <button 
-                      key={category}
-                      className={`text-sm px-3 py-1.5 ${
-                        activeCategory === category 
-                          ? 'border-b-2 border-blue-600 text-blue-600' 
-                          : 'text-gray-400 hover:text-gray-300'
-                      }`}
-                      onClick={() => setActiveCategory(category)}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-              </ScrollArea>
-              
               <div className="space-y-6 mt-4">
-                {filteredNews.length > 0 ? (
-                  filteredNews.map(article => (
+                {news.length > 0 ? (
+                  news.slice(0, 10).map(article => (
                     <div 
                       key={article.id} 
                       className="flex gap-3 pb-4 border-b border-neutral-800 cursor-pointer"

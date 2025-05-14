@@ -8,9 +8,15 @@ interface CategoryNewsGalleryProps {
   title: string;
   articles: NewsArticle[];
   description?: string;
+  autoScrollInterval?: number; // in milliseconds
 }
 
-export function CategoryNewsGallery({ title, articles, description = "" }: CategoryNewsGalleryProps) {
+export function CategoryNewsGallery({ 
+  title, 
+  articles, 
+  description = "", 
+  autoScrollInterval = 5000 // Default to 5 seconds
+}: CategoryNewsGalleryProps) {
   const navigate = useNavigate();
 
   // Convert news articles to Gallery4Item format
@@ -38,6 +44,7 @@ export function CategoryNewsGallery({ title, articles, description = "" }: Categ
       title={title}
       description={description}
       items={items}
+      autoScrollInterval={autoScrollInterval}
     />
   );
 }

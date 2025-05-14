@@ -7,7 +7,7 @@ import { getNewsArticles, NewsArticle } from '@/services/newsService';
 import SearchBar from '@/components/SearchBar';
 import { formatPublishedDate } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import NewsStoryCarousel from '@/components/NewsStoryCarousel';
+import { TrendingNewsGallery } from '@/components/blocks/TrendingNewsGallery';
 
 const HomePage = () => {
   const [news, setNews] = useState<NewsArticle[]>([]);
@@ -94,23 +94,9 @@ const HomePage = () => {
           </div>
         ) : (
           <>
-            {/* Trending - Auto-scrollable carousel */}
-            <div className="px-4 mb-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">Trending</h2>
-                <button 
-                  className="flex items-center text-sm text-blue-500"
-                  onClick={() => navigate('/categories')}
-                >
-                  See all
-                  <ChevronRight className="w-4 h-4 ml-1" />
-                </button>
-              </div>
-              
-              <NewsStoryCarousel 
-                articles={trendingNews} 
-                autoScrollInterval={5000} 
-              />
+            {/* Trending - Gallery4 carousel */}
+            <div className="mb-6">
+              <TrendingNewsGallery trendingNews={trendingNews} />
             </div>
             
             {/* Latest */}

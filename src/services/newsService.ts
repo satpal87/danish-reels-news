@@ -52,6 +52,7 @@ export async function getAllNewsArticles(): Promise<NewsArticle[]> {
       throw error;
     }
 
+    console.log("Fetched articles:", data);
     return data || [];
   } catch (error) {
     console.error("Error in getAllNewsArticles:", error);
@@ -78,6 +79,7 @@ export async function createNewsArticle(article: Omit<NewsArticle, "id" | "creat
       throw error;
     }
 
+    console.log("Created article:", data);
     return data;
   } catch (error) {
     console.error("Error in createNewsArticle:", error);
@@ -100,6 +102,7 @@ export async function updateNewsArticle(id: string, article: Partial<NewsArticle
       throw error;
     }
 
+    console.log("Updated article:", data);
     return data;
   } catch (error) {
     console.error("Error in updateNewsArticle:", error);
@@ -120,6 +123,7 @@ export async function deleteNewsArticle(id: string): Promise<boolean> {
       throw error;
     }
 
+    console.log("Article deleted successfully");
     return true;
   } catch (error) {
     console.error("Error in deleteNewsArticle:", error);
@@ -140,6 +144,7 @@ export async function toggleNewsStatus(id: string, active: boolean): Promise<boo
       throw error;
     }
 
+    console.log("Article status toggled successfully");
     return true;
   } catch (error) {
     console.error("Error in toggleNewsStatus:", error);

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Bookmark, Edit, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import NewsForm from "@/components/NewsForm";
 import { Card } from "@/components/ui/card";
 
@@ -206,18 +207,22 @@ const AdminPage = () => {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-4xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>{createMode ? 'Create New Article' : 'Edit Article'}</DialogTitle>
             <DialogDescription>
               {createMode ? 'Add a new news article' : 'Make changes to the existing article'}
             </DialogDescription>
           </DialogHeader>
-          <NewsForm 
-            article={editingArticle} 
-            onSuccess={handleFormSuccess} 
-            isCreate={createMode}
-          />
+          <ScrollArea className="h-[70vh] pr-4">
+            <div className="p-1">
+              <NewsForm 
+                article={editingArticle} 
+                onSuccess={handleFormSuccess} 
+                isCreate={createMode}
+              />
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
       

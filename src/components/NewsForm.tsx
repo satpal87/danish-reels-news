@@ -41,6 +41,7 @@ const NewsForm = ({ article, onSuccess, isCreate = false }: NewsFormProps) => {
 
   useEffect(() => {
     if (article && !isCreate) {
+      console.log("Editing article:", article);
       // Format sources array back to comma-separated string for editing
       const sourcesString = article.sources ? article.sources.join(', ') : '';
       setSourcesInput(sourcesString);
@@ -79,6 +80,8 @@ const NewsForm = ({ article, onSuccess, isCreate = false }: NewsFormProps) => {
     setIsSubmitting(true);
     
     try {
+      console.log("Form submission - data:", formData);
+      
       if (isCreate) {
         // Create new article
         const result = await createNewsArticle({
@@ -96,6 +99,7 @@ const NewsForm = ({ article, onSuccess, isCreate = false }: NewsFormProps) => {
         });
       } else if (article) {
         // Update existing article
+        console.log("Updating article with ID:", article.id, "Data:", formData);
         const result = await updateNewsArticle(article.id, formData);
         
         if (!result) {

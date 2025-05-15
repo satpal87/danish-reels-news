@@ -21,6 +21,7 @@ export interface NewsArticle {
 
 export async function getNewsArticles(): Promise<NewsArticle[]> {
   try {
+    console.log("Getting published news articles...");
     const { data, error } = await supabase
       .from("news_articles")
       .select("*")
@@ -33,6 +34,7 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
       throw error;
     }
 
+    console.log(`Found ${data?.length || 0} published articles`);
     return data || [];
   } catch (error) {
     console.error("Error in getNewsArticles:", error);
@@ -42,6 +44,7 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
 
 export async function getAllNewsArticles(): Promise<NewsArticle[]> {
   try {
+    console.log("Getting all news articles for admin...");
     const { data, error } = await supabase
       .from("news_articles")
       .select("*")
@@ -52,7 +55,7 @@ export async function getAllNewsArticles(): Promise<NewsArticle[]> {
       throw error;
     }
 
-    console.log("Fetched articles:", data);
+    console.log(`Found ${data?.length || 0} total articles`);
     return data || [];
   } catch (error) {
     console.error("Error in getAllNewsArticles:", error);
@@ -62,6 +65,8 @@ export async function getAllNewsArticles(): Promise<NewsArticle[]> {
 
 export async function createNewsArticle(article: Omit<NewsArticle, "id" | "created_at" | "imported_date">): Promise<NewsArticle | null> {
   try {
+    console.log("Creating new article:", article);
+    
     // Ensure imported_date is set for new articles
     const newArticle = {
       ...article,
@@ -79,7 +84,7 @@ export async function createNewsArticle(article: Omit<NewsArticle, "id" | "creat
       throw error;
     }
 
-    console.log("Created article:", data);
+    console.log("Created article successfully:", data);
     return data;
   } catch (error) {
     console.error("Error in createNewsArticle:", error);
@@ -90,9 +95,18 @@ export async function createNewsArticle(article: Omit<NewsArticle, "id" | "creat
 export async function updateNewsArticle(id: string, article: Partial<NewsArticle>): Promise<NewsArticle | null> {
   try {
     console.log("Updating article with ID:", id, "Data:", article);
+    
+    // Strip undefined values to prevent RLS issues
+    const cleanedArticle = Object.entries(article).reduce((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {} as Record<string, any>);
+    
     const { data, error } = await supabase
       .from("news_articles")
-      .update(article)
+      .update(cleanedArticle)
       .eq("id", id)
       .select()
       .single();
@@ -102,7 +116,7 @@ export async function updateNewsArticle(id: string, article: Partial<NewsArticle
       throw error;
     }
 
-    console.log("Updated article:", data);
+    console.log("Updated article successfully:", data);
     return data;
   } catch (error) {
     console.error("Error in updateNewsArticle:", error);
@@ -133,7 +147,7 @@ export async function deleteNewsArticle(id: string): Promise<boolean> {
 
 export async function toggleNewsStatus(id: string, active: boolean): Promise<boolean> {
   try {
-    console.log("Toggling article status with ID:", id, "Active:", active);
+    console.log("Toggling article status with ID:", id, "New active state:", active);
     const { error } = await supabase
       .from("news_articles")
       .update({ active })

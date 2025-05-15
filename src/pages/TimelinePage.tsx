@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getNewsArticles } from "@/services/newsService";
 import { useEffect, useState } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { format } from "date-fns";
 
 const TimelinePage = () => {
   const [timelineData, setTimelineData] = useState<TimelineEntry[]>([]);
@@ -17,26 +18,46 @@ const TimelinePage = () => {
         setLoading(true);
         const articles = await getNewsArticles();
         
-        // Group articles by category
-        const categoryGroups: Record<string, any[]> = {};
-        articles.forEach(article => {
-          const category = article.category || 'Uncategorized';
-          if (!categoryGroups[category]) {
-            categoryGroups[category] = [];
+        if (!articles.length) {
+          setTimelineData([]);
+          return;
+        }
+
+        // Sort articles by published date (newest first)
+        const sortedArticles = [...articles].sort((a, b) => {
+          const dateA = a.published_date ? new Date(a.published_date).getTime() : 0;
+          const dateB = b.published_date ? new Date(b.published_date).getTime() : 0;
+          return dateB - dateA;
+        });
+
+        // Take only top 20 articles
+        const limitedArticles = sortedArticles.slice(0, 20);
+        
+        // Group articles by published date (year-month format)
+        const dateGroups: Record<string, any[]> = {};
+        
+        limitedArticles.forEach(article => {
+          if (!article.published_date) return;
+          
+          const date = new Date(article.published_date);
+          const dateKey = format(date, 'MMMM yyyy');
+          
+          if (!dateGroups[dateKey]) {
+            dateGroups[dateKey] = [];
           }
-          categoryGroups[category].push(article);
+          dateGroups[dateKey].push(article);
         });
 
         // Convert to timeline entries
-        const timelineEntries = Object.entries(categoryGroups).map(([category, articles]) => ({
-          title: category,
+        const timelineEntries = Object.entries(dateGroups).map(([dateKey, articles]) => ({
+          title: dateKey,
           content: (
             <div>
               <p className="text-neutral-300 text-xs md:text-sm font-normal mb-4">
-                Latest {category} news and updates
+                News published in {dateKey}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                {articles.slice(0, 4).map((article, idx) => (
+                {articles.map((article, idx) => (
                   <div 
                     key={idx} 
                     className="bg-neutral-900 p-4 rounded-lg cursor-pointer"
@@ -46,6 +67,9 @@ const TimelinePage = () => {
                       <div className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">
                         {article.category || "News"}
                       </div>
+                      <span className="text-neutral-400 text-xs ml-2">
+                        {article.published_date ? format(new Date(article.published_date), 'dd MMM yyyy') : 'No date'}
+                      </span>
                     </div>
                     <h4 className="text-white font-medium mb-2 line-clamp-2">{article.title_en || article.title}</h4>
                     <p className="text-neutral-400 text-xs line-clamp-3">{article.summary_txt || article.summary}</p>

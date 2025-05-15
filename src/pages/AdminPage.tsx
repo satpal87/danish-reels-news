@@ -22,6 +22,7 @@ const AdminPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [createMode, setCreateMode] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [processingIds, setProcessingIds] = useState<string[]>([]);
   
   const navigate = useNavigate();
 
@@ -58,10 +59,15 @@ const AdminPage = () => {
 
   const handleStatusToggle = async (id: string, currentStatus: boolean) => {
     try {
+      setProcessingIds(prev => [...prev, id]);
+      console.log(`Toggling status for article ${id} from ${currentStatus} to ${!currentStatus}`);
+      
       // Call the API to toggle status
       const success = await toggleNewsStatus(id, !currentStatus);
       
       if (success) {
+        console.log(`Successfully toggled status for article ${id}`);
+        
         // Update local state only if API call was successful
         setNewsArticles(articles => articles.map(article => 
           article.id === id ? { ...article, active: !currentStatus } : article
@@ -85,6 +91,8 @@ const AdminPage = () => {
         description: "Could not update article status",
         variant: "destructive"
       });
+    } finally {
+      setProcessingIds(prev => prev.filter(item => item !== id));
     }
   };
 
@@ -94,6 +102,8 @@ const AdminPage = () => {
     }
     
     try {
+      setProcessingIds(prev => [...prev, id]);
+      
       // Call the API to delete the article
       const success = await deleteNewsArticle(id);
       
@@ -116,10 +126,13 @@ const AdminPage = () => {
         description: "Could not delete the article",
         variant: "destructive"
       });
+    } finally {
+      setProcessingIds(prev => prev.filter(item => item !== id));
     }
   };
 
   const handleEdit = (article: NewsArticle) => {
+    console.log("Editing article:", article);
     setEditingArticle(article);
     setCreateMode(false);
     setIsDialogOpen(true);
@@ -245,13 +258,24 @@ const AdminPage = () => {
                       <Switch 
                         checked={article.active}
                         onCheckedChange={() => handleStatusToggle(article.id, article.active)}
+                        disabled={processingIds.includes(article.id)}
                       />
                     </TableCell>
                     <TableCell className="text-right space-x-2">
-                      <Button variant="outline" size="sm" onClick={() => handleEdit(article)}>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => handleEdit(article)}
+                        disabled={processingIds.includes(article.id)}
+                      >
                         <Edit className="h-4 w-4 mr-1" /> Edit
                       </Button>
-                      <Button variant="destructive" size="sm" onClick={() => handleDelete(article.id)}>
+                      <Button 
+                        variant="destructive" 
+                        size="sm" 
+                        onClick={() => handleDelete(article.id)}
+                        disabled={processingIds.includes(article.id)}
+                      >
                         <Trash2 className="h-4 w-4 mr-1" /> Delete
                       </Button>
                     </TableCell>
@@ -264,7 +288,7 @@ const AdminPage = () => {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh]">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>{createMode ? 'Create New Article' : 'Edit Article'}</DialogTitle>
             <DialogDescription>
@@ -272,7 +296,7 @@ const AdminPage = () => {
             </DialogDescription>
           </DialogHeader>
           <ScrollArea className="h-[70vh] pr-4">
-            <div className="p-1 pb-16">
+            <div className="p-1">
               <NewsForm 
                 article={editingArticle} 
                 onSuccess={handleFormSuccess} 

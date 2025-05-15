@@ -128,7 +128,7 @@ const NewsForm = ({ article, onSuccess, isCreate = false }: NewsFormProps) => {
 
   return (
     <div className="relative">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="title">Title (Danish)</Label>
@@ -281,8 +281,8 @@ const NewsForm = ({ article, onSuccess, isCreate = false }: NewsFormProps) => {
         </div>
       </form>
       
-      {/* Fixed action buttons */}
-      <Card className="sticky bottom-0 p-4 mt-6 bg-background border-t border-border flex justify-end space-x-2 z-50">
+      {/* Fixed action buttons - moved outside the form for better visibility */}
+      <Card className="fixed bottom-10 left-0 right-0 p-4 mx-auto max-w-4xl bg-background border-t border-border flex justify-end space-x-2 z-50">
         <Button type="button" variant="outline" onClick={onSuccess} disabled={isSubmitting}>
           Cancel
         </Button>

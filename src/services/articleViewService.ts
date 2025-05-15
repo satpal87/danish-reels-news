@@ -17,7 +17,7 @@ export async function trackArticleView(articleId: string, userId?: string | null
   try {
     const sessionId = getSessionId();
 
-    // Use raw query approach
+    // Use RPC call instead of direct table operations
     const { error } = await supabase.rpc('track_article_view', { 
       p_article_id: articleId, 
       p_user_id: userId,
@@ -41,7 +41,7 @@ export async function getRemainingViews(): Promise<number> {
   try {
     const sessionId = getSessionId();
     
-    // Use raw function call for count
+    // Use RPC call for count
     const { data, error } = await supabase.rpc('get_remaining_article_views', {
       p_session_id: sessionId
     });
@@ -72,7 +72,7 @@ export async function hasReachedDailyLimit(): Promise<boolean> {
 // Get user's reading history
 export async function getUserReadingHistory(userId: string): Promise<any[]> {
   try {
-    // Use raw query for reading history
+    // Use RPC call for reading history
     const { data, error } = await supabase.rpc('get_user_reading_history', {
       p_user_id: userId
     });

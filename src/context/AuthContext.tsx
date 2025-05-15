@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -57,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkIfAdmin = async (userId: string) => {
     try {
-      // Use raw SQL query to check admin status instead of directly accessing user_roles
+      // Use RPC function to check admin status
       const { data, error } = await supabase.rpc('has_admin_role', { 
         p_user_id: userId 
       });

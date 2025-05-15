@@ -71,7 +71,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_remaining_article_views: {
+        Args: { p_session_id: string }
+        Returns: number
+      }
+      get_user_reading_history: {
+        Args: { p_user_id: string }
+        Returns: Json[]
+      }
+      has_admin_role: {
+        Args: { p_user_id: string }
+        Returns: boolean
+      }
+      track_article_view: {
+        Args: { p_article_id: string; p_user_id: string; p_session_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

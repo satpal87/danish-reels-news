@@ -3,6 +3,10 @@ project_id = "kfiabfgpjkiyecfxkgfm"
 
 [functions]
 [db.functions]
+track_article_view = {}
+get_remaining_article_views = {}
+get_user_reading_history = {}
+has_admin_role = {}
 [extensions]
 [hooks]
 [http.rules]

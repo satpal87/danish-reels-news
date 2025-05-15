@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Card } from "@/components/ui/card";
 
 interface NewsFormProps {
   article: NewsArticle | null;
@@ -126,164 +127,174 @@ const NewsForm = ({ article, onSuccess, isCreate = false }: NewsFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="relative">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="title">Title (Danish)</Label>
+            <Input 
+              id="title"
+              name="title"
+              value={formData.title || ''}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="title_en">Title (English)</Label>
+            <Input 
+              id="title_en"
+              name="title_en"
+              value={formData.title_en || ''}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="category">Category</Label>
+            <Input 
+              id="category"
+              name="category"
+              value={formData.category || ''}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="status">Status</Label>
+            <Select
+              name="status"
+              value={formData.status || 'draft'}
+              onValueChange={(value) => handleSelectChange(value, 'status')}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="draft">Draft</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="published">Published</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        
         <div className="space-y-2">
-          <Label htmlFor="title">Title (Danish)</Label>
+          <Label htmlFor="image">Image URL</Label>
           <Input 
-            id="title"
-            name="title"
-            value={formData.title || ''}
+            id="image"
+            name="image"
+            value={formData.image || ''}
             onChange={handleChange}
-            required
+            placeholder="https://example.com/image.jpg"
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="title_en">Title (English)</Label>
-          <Input 
-            id="title_en"
-            name="title_en"
-            value={formData.title_en || ''}
+          <Label htmlFor="summary">Summary</Label>
+          <Textarea 
+            id="summary"
+            name="summary"
+            value={formData.summary || ''}
             onChange={handleChange}
-          />
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="category">Category</Label>
-          <Input 
-            id="category"
-            name="category"
-            value={formData.category || ''}
-            onChange={handleChange}
+            rows={2}
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="status">Status</Label>
-          <Select
-            name="status"
-            value={formData.status || 'draft'}
-            onValueChange={(value) => handleSelectChange(value, 'status')}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="draft">Draft</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="published">Published</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="image">Image URL</Label>
-        <Input 
-          id="image"
-          name="image"
-          value={formData.image || ''}
-          onChange={handleChange}
-          placeholder="https://example.com/image.jpg"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="summary">Summary</Label>
-        <Textarea 
-          id="summary"
-          name="summary"
-          value={formData.summary || ''}
-          onChange={handleChange}
-          rows={2}
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="summary_txt">Summary Text</Label>
-        <Textarea 
-          id="summary_txt"
-          name="summary_txt"
-          value={formData.summary_txt || ''}
-          onChange={handleChange}
-          rows={2}
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="html">HTML Content</Label>
-        <Textarea 
-          id="html"
-          name="html"
-          value={formData.html || ''}
-          onChange={handleChange}
-          rows={6}
-          placeholder="<p>Article content here</p>"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="sources">Sources (comma separated)</Label>
-        <Input 
-          id="sources"
-          value={sourcesInput}
-          onChange={handleSourcesChange}
-          placeholder="DR, TV2, Politiken"
-        />
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="published_date">Publication Date</Label>
-          <Input 
-            id="published_date"
-            name="published_date"
-            type="datetime-local"
-            value={formData.published_date ? new Date(formData.published_date).toISOString().slice(0, 16) : ''}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value) {
-                setFormData(prev => ({
-                  ...prev,
-                  published_date: new Date(value).toISOString()
-                }));
-              }
-            }}
+          <Label htmlFor="summary_txt">Summary Text</Label>
+          <Textarea 
+            id="summary_txt"
+            name="summary_txt"
+            value={formData.summary_txt || ''}
+            onChange={handleChange}
+            rows={2}
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="rate">Rating (0-5)</Label>
-          <Input 
-            id="rate"
-            name="rate"
-            type="number"
-            min="0"
-            max="5"
-            value={formData.rate || 0}
+          <Label htmlFor="html">HTML Content</Label>
+          <Textarea 
+            id="html"
+            name="html"
+            value={formData.html || ''}
             onChange={handleChange}
+            rows={6}
+            placeholder="<p>Article content here</p>"
           />
         </div>
-      </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="sources">Sources (comma separated)</Label>
+          <Input 
+            id="sources"
+            value={sourcesInput}
+            onChange={handleSourcesChange}
+            placeholder="DR, TV2, Politiken"
+          />
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="published_date">Publication Date</Label>
+            <Input 
+              id="published_date"
+              name="published_date"
+              type="datetime-local"
+              value={formData.published_date ? new Date(formData.published_date).toISOString().slice(0, 16) : ''}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value) {
+                  setFormData(prev => ({
+                    ...prev,
+                    published_date: new Date(value).toISOString()
+                  }));
+                }
+              }}
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="rate">Rating (0-5)</Label>
+            <Input 
+              id="rate"
+              name="rate"
+              type="number"
+              min="0"
+              max="5"
+              value={formData.rate || 0}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="active"
+            checked={formData.active || false}
+            onCheckedChange={(checked) => handleSwitchChange(checked, 'active')}
+          />
+          <Label htmlFor="active">Article Active</Label>
+        </div>
+      </form>
       
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="active"
-          checked={formData.active || false}
-          onCheckedChange={(checked) => handleSwitchChange(checked, 'active')}
-        />
-        <Label htmlFor="active">Article Active</Label>
-      </div>
-      
-      <div className="flex justify-end space-x-2 mt-6">
-        <Button type="submit" disabled={isSubmitting}>
+      {/* Fixed action buttons */}
+      <Card className="sticky bottom-0 p-4 mt-6 bg-background border-t border-border flex justify-end space-x-2 z-50">
+        <Button type="button" variant="outline" onClick={onSuccess} disabled={isSubmitting}>
+          Cancel
+        </Button>
+        <Button 
+          type="button" 
+          onClick={handleSubmit} 
+          disabled={isSubmitting}
+        >
           {isSubmitting ? 'Saving...' : isCreate ? 'Create Article' : 'Update Article'}
         </Button>
-      </div>
-    </form>
+      </Card>
+    </div>
   );
 };
 

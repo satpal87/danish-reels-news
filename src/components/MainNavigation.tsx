@@ -1,5 +1,5 @@
 
-import { Home, Search, List, Heart, Settings } from 'lucide-react';
+import { Home, Clock, List, Heart, Settings } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -9,7 +9,7 @@ const MainNavigation = () => {
   
   const navItems = [
     { name: 'Home', url: '/', icon: Home },
-    { name: 'Search', url: '/search', icon: Search },
+    { name: 'Timeline', url: '/timeline', icon: Clock },
     { name: 'Categories', url: '/categories', icon: List },
     { name: 'Saved', url: '/saved', icon: Heart },
     { name: 'Settings', url: '/settings', icon: Settings },

@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import MainNavigation from "./components/MainNavigation";
 import AdminPage from "./pages/AdminPage";
 import ArticlePage from "./pages/ArticlePage";
+import TimelinePage from "./pages/TimelinePage";
 import { useIsMobile } from './hooks/use-mobile';
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const AppContent = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/article/:id" element={<ArticlePage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/timeline" element={<TimelinePage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/saved" element={<SavedPage />} />
           <Route path="/settings" element={<SettingsPage />} />

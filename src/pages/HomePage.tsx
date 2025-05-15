@@ -10,7 +10,6 @@ import { TrendingNewsGallery } from '@/components/blocks/TrendingNewsGallery';
 import { CategoryNewsGallery } from '@/components/blocks/CategoryNewsGallery';
 
 const HomePage = () => {
-  const [news, setNews] = useState<NewsArticle[]>([]);
   const [trendingNews, setTrendingNews] = useState<NewsArticle[]>([]);
   const [sportsNews, setSportsNews] = useState<NewsArticle[]>([]);
   const [localNews, setLocalNews] = useState<NewsArticle[]>([]);
@@ -56,7 +55,6 @@ const HomePage = () => {
           setLocalNews(localArticles);
           setBusinessNews(businessArticles);
           setTechNews(technologyArticles);
-          setNews(articles);
         } else {
           console.log('No articles returned or empty array');
           toast({
@@ -166,62 +164,6 @@ const HomePage = () => {
                 />
               </div>
             )}
-            
-            {/* Latest News - Simple List */}
-            <div className="px-4 mb-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">Latest</h2>
-                <button 
-                  className="flex items-center text-sm text-blue-500"
-                  onClick={() => navigate('/categories')}
-                >
-                  See all
-                  <ChevronRight className="w-4 h-4 ml-1" />
-                </button>
-              </div>
-              
-              <div className="space-y-6 mt-4">
-                {news.length > 0 ? (
-                  news.slice(0, 10).map(article => (
-                    <div 
-                      key={article.id} 
-                      className="flex gap-3 pb-4 border-b border-neutral-800 cursor-pointer"
-                      onClick={() => navigate(`/article/${article.id}`)}
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center mb-1">
-                          <div className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded">
-                            {article.category || "News"}
-                          </div>
-                        </div>
-                        <h3 className="font-medium line-clamp-2 mb-1">
-                          {article.title_en || article.title}
-                        </h3>
-                        <p className="text-sm text-gray-400 line-clamp-2 mb-1">
-                          {article.summary_txt || article.summary}
-                        </p>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-xs text-gray-400">
-                            {formatPublishedDate(article.published_date)}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="w-24 h-24">
-                        <img 
-                          src={article.image || 'https://placehold.co/600x400?text=No+Image'} 
-                          alt={article.title_en || article.title} 
-                          className="w-full h-full object-cover rounded"
-                        />
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-6 bg-neutral-900 rounded-lg">
-                    <p>No articles available</p>
-                  </div>
-                )}
-              </div>
-            </div>
           </>
         )}
       </div>

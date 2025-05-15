@@ -81,14 +81,27 @@ const NewsForm = ({ article, onSuccess, isCreate = false }: NewsFormProps) => {
     try {
       if (isCreate) {
         // Create new article
-        await createNewsArticle(formData as any);
+        const result = await createNewsArticle({
+          ...formData,
+          imported_date: new Date().toISOString(),
+        } as any);
+        
+        if (!result) {
+          throw new Error('Failed to create article');
+        }
+        
         toast({
           title: "Article created",
           description: "The news article has been created successfully",
         });
       } else if (article) {
         // Update existing article
-        await updateNewsArticle(article.id, formData);
+        const result = await updateNewsArticle(article.id, formData);
+        
+        if (!result) {
+          throw new Error('Failed to update article');
+        }
+        
         toast({
           title: "Article updated",
           description: "The news article has been updated successfully",

@@ -61,9 +61,15 @@ export async function getAllNewsArticles(): Promise<NewsArticle[]> {
 
 export async function createNewsArticle(article: Omit<NewsArticle, "id" | "created_at" | "imported_date">): Promise<NewsArticle | null> {
   try {
+    // Ensure imported_date is set for new articles
+    const newArticle = {
+      ...article,
+      imported_date: new Date().toISOString()
+    };
+
     const { data, error } = await supabase
       .from("news_articles")
-      .insert([article])
+      .insert([newArticle])
       .select()
       .single();
 
@@ -81,6 +87,7 @@ export async function createNewsArticle(article: Omit<NewsArticle, "id" | "creat
 
 export async function updateNewsArticle(id: string, article: Partial<NewsArticle>): Promise<NewsArticle | null> {
   try {
+    console.log("Updating article with ID:", id, "Data:", article);
     const { data, error } = await supabase
       .from("news_articles")
       .update(article)
@@ -102,6 +109,7 @@ export async function updateNewsArticle(id: string, article: Partial<NewsArticle
 
 export async function deleteNewsArticle(id: string): Promise<boolean> {
   try {
+    console.log("Deleting article with ID:", id);
     const { error } = await supabase
       .from("news_articles")
       .delete()
@@ -121,6 +129,7 @@ export async function deleteNewsArticle(id: string): Promise<boolean> {
 
 export async function toggleNewsStatus(id: string, active: boolean): Promise<boolean> {
   try {
+    console.log("Toggling article status with ID:", id, "Active:", active);
     const { error } = await supabase
       .from("news_articles")
       .update({ active })

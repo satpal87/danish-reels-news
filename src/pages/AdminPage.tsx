@@ -53,17 +53,22 @@ const AdminPage = () => {
 
   const handleStatusToggle = async (id: string, currentStatus: boolean) => {
     try {
-      await toggleNewsStatus(id, !currentStatus);
+      // Call the API to toggle status
+      const success = await toggleNewsStatus(id, !currentStatus);
       
-      // Update local state
-      setNewsArticles(articles => articles.map(article => 
-        article.id === id ? { ...article, active: !currentStatus } : article
-      ));
-      
-      toast({
-        title: "Status updated",
-        description: `Article ${!currentStatus ? 'activated' : 'deactivated'} successfully`,
-      });
+      if (success) {
+        // Update local state only if API call was successful
+        setNewsArticles(articles => articles.map(article => 
+          article.id === id ? { ...article, active: !currentStatus } : article
+        ));
+        
+        toast({
+          title: "Status updated",
+          description: `Article ${!currentStatus ? 'activated' : 'deactivated'} successfully`,
+        });
+      } else {
+        throw new Error("Failed to update status");
+      }
     } catch (error) {
       console.error('Error toggling article status:', error);
       toast({
@@ -80,15 +85,20 @@ const AdminPage = () => {
     }
     
     try {
-      await deleteNewsArticle(id);
+      // Call the API to delete the article
+      const success = await deleteNewsArticle(id);
       
-      // Update local state
-      setNewsArticles(articles => articles.filter(article => article.id !== id));
-      
-      toast({
-        title: "Article deleted",
-        description: "The article has been deleted successfully",
-      });
+      if (success) {
+        // Update local state only if API call was successful
+        setNewsArticles(articles => articles.filter(article => article.id !== id));
+        
+        toast({
+          title: "Article deleted",
+          description: "The article has been deleted successfully",
+        });
+      } else {
+        throw new Error("Failed to delete article");
+      }
     } catch (error) {
       console.error('Error deleting article:', error);
       toast({
@@ -113,7 +123,7 @@ const AdminPage = () => {
 
   const handleFormSuccess = () => {
     setIsDialogOpen(false);
-    fetchArticles();
+    fetchArticles(); // Refresh the list after edit/create
   };
 
   // For demonstration purposes, make admin access always available

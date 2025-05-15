@@ -17,13 +17,12 @@ export async function trackArticleView(articleId: string, userId?: string | null
   try {
     const sessionId = getSessionId();
 
-    const { error } = await supabase
-      .from('article_views')
-      .insert({
-        article_id: articleId,
-        user_id: userId || null,
-        session_id: !userId ? sessionId : null,
-      });
+    // Use raw query approach
+    const { error } = await supabase.rpc('track_article_view', { 
+      p_article_id: articleId, 
+      p_user_id: userId,
+      p_session_id: !userId ? sessionId : null
+    });
 
     if (error) {
       console.error('Error tracking article view:', error);
@@ -42,21 +41,17 @@ export async function getRemainingViews(): Promise<number> {
   try {
     const sessionId = getSessionId();
     
-    // Direct database call to get count
-    const { data, error } = await supabase
-      .from('article_views')
-      .select('id', { count: 'exact' })
-      .eq('session_id', sessionId)
-      .gte('viewed_at', new Date(new Date().setHours(0, 0, 0, 0)).toISOString())
-      .lt('viewed_at', new Date(new Date().setHours(23, 59, 59, 999)).toISOString());
+    // Use raw function call for count
+    const { data, error } = await supabase.rpc('get_remaining_article_views', {
+      p_session_id: sessionId
+    });
 
     if (error) {
       console.error('Error getting view count:', error);
       return 5; // Default to 5 if error
     }
 
-    const count = data?.length || 0;
-    return Math.max(0, 5 - count);
+    return data || 5;
   } catch (error) {
     console.error('Error in getRemainingViews:', error);
     return 5; // Default to 5 if error
@@ -77,22 +72,10 @@ export async function hasReachedDailyLimit(): Promise<boolean> {
 // Get user's reading history
 export async function getUserReadingHistory(userId: string): Promise<any[]> {
   try {
-    const { data, error } = await supabase
-      .from('article_views')
-      .select(`
-        id,
-        viewed_at,
-        news_articles (
-          id,
-          title,
-          title_en,
-          image,
-          category,
-          published_date
-        )
-      `)
-      .eq('user_id', userId)
-      .order('viewed_at', { ascending: false });
+    // Use raw query for reading history
+    const { data, error } = await supabase.rpc('get_user_reading_history', {
+      p_user_id: userId
+    });
 
     if (error) {
       console.error('Error getting reading history:', error);

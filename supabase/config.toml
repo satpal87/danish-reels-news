@@ -1,1 +1,8 @@
+
 project_id = "kfiabfgpjkiyecfxkgfm"
+
+[functions]
+[db.functions]
+[extensions]
+[hooks]
+[http.rules]

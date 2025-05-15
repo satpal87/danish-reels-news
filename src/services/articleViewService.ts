@@ -16,6 +16,7 @@ export function getSessionId(): string {
 export async function trackArticleView(articleId: string, userId?: string | null): Promise<boolean> {
   try {
     const sessionId = getSessionId();
+    console.log('Tracking article view:', { articleId, userId, sessionId });
 
     // Use RPC call instead of direct table operations
     const { error } = await supabase.rpc('track_article_view', { 
@@ -40,6 +41,7 @@ export async function trackArticleView(articleId: string, userId?: string | null
 export async function getRemainingViews(): Promise<number> {
   try {
     const sessionId = getSessionId();
+    console.log('Getting remaining views for session:', sessionId);
     
     // Use RPC call for count
     const { data, error } = await supabase.rpc('get_remaining_article_views', {
@@ -51,6 +53,7 @@ export async function getRemainingViews(): Promise<number> {
       return 5; // Default to 5 if error
     }
 
+    console.log('Remaining views data:', data);
     return data || 5;
   } catch (error) {
     console.error('Error in getRemainingViews:', error);
@@ -62,6 +65,7 @@ export async function getRemainingViews(): Promise<number> {
 export async function hasReachedDailyLimit(): Promise<boolean> {
   try {
     const remainingViews = await getRemainingViews();
+    console.log('Remaining views check:', remainingViews);
     return remainingViews <= 0;
   } catch (error) {
     console.error('Error in hasReachedDailyLimit:', error);

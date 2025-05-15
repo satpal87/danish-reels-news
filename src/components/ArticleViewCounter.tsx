@@ -18,6 +18,7 @@ export function ArticleViewCounter() {
       try {
         const count = await getRemainingViews();
         setRemainingViews(count);
+        console.log('Remaining views:', count); // Debug log to verify count
       } catch (error) {
         console.error('Error fetching remaining views:', error);
       }
@@ -25,29 +26,45 @@ export function ArticleViewCounter() {
 
     fetchRemainingViews();
     
-    // Refresh the counter every minute or when component mounts
-    const interval = setInterval(fetchRemainingViews, 60000);
+    // Refresh the counter when component mounts and periodically
+    const interval = setInterval(fetchRemainingViews, 10000); // Check more frequently (every 10 seconds)
     
     return () => clearInterval(interval);
   }, [user]);
 
+  // Don't display anything for logged-in users or if we haven't fetched the count yet
   if (user || remainingViews === null) return null;
+
+  // If user has no more views, show a more prominent message
+  if (remainingViews <= 0) {
+    return (
+      <div className="fixed bottom-20 left-0 right-0 z-40 px-4">
+        <div className="rounded-lg p-3 bg-red-900/90 flex flex-col items-center">
+          <div className="flex items-center mb-2">
+            <AlertCircle className="h-5 w-5 mr-2 text-red-300" />
+            <span className="text-sm font-medium">You've reached your daily article limit</span>
+          </div>
+          <Button 
+            onClick={() => navigate('/auth')}
+            variant="outline"
+            className="w-full text-sm"
+          >
+            Sign in for unlimited access
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed bottom-20 left-0 right-0 z-40 px-4">
-      <div className={`rounded-lg p-3 flex items-center justify-between transition-colors ${
-        remainingViews <= 1 ? 'bg-red-900/80' : 'bg-blue-900/80'
+      <div className={`rounded-lg p-3 flex items-center justify-between ${
+        remainingViews <= 1 ? 'bg-orange-900/80' : 'bg-blue-900/80'
       }`}>
         <div className="flex items-center">
-          {remainingViews <= 1 ? (
-            <AlertCircle className="h-5 w-5 mr-2 text-red-300" />
-          ) : (
-            <Eye className="h-5 w-5 mr-2 text-blue-300" />
-          )}
+          <Eye className="h-5 w-5 mr-2 text-blue-300" />
           <span className="text-sm">
-            {remainingViews === 0 
-              ? "You've reached your daily limit" 
-              : `${remainingViews} free ${remainingViews === 1 ? 'article' : 'articles'} remaining today`}
+            {`${remainingViews} free ${remainingViews === 1 ? 'article' : 'articles'} remaining today`}
           </span>
         </div>
         <Button 

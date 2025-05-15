@@ -18,22 +18,25 @@ const ArticlePage = () => {
   const [isLimited, setIsLimited] = useState(false);
   const [hasTrackedView, setHasTrackedView] = useState(false);
 
+  // Check limits first, before loading article content
+  useEffect(() => {
+    const checkLimits = async () => {
+      if (!user) {
+        const reachedLimit = await hasReachedDailyLimit();
+        console.log("Has reached limit:", reachedLimit); // Debug log
+        setIsLimited(reachedLimit);
+      }
+    };
+    
+    checkLimits();
+  }, [user]);
+
   const { data: article, isLoading } = useQuery({
     queryKey: ["article", id],
     queryFn: async () => {
-      // For anonymous users, check if they've reached their limit
-      if (!user) {
-        const reachedLimit = await hasReachedDailyLimit();
-        setIsLimited(reachedLimit);
-        
-        if (reachedLimit) {
-          toast({
-            title: "Daily limit reached",
-            description: "Sign in to read unlimited articles",
-            variant: "destructive",
-          });
-          return null;
-        }
+      // For anonymous users, we already checked if they've reached limit in useEffect
+      if (isLimited) {
+        return null;
       }
 
       const { data, error } = await supabase
@@ -53,14 +56,18 @@ const ArticlePage = () => {
 
       return data;
     },
+    enabled: !isLimited || !!user, // Only run query if user has not reached limit or is logged in
   });
 
   // Track article view once data is loaded
   useEffect(() => {
     const track = async () => {
       if (article && !hasTrackedView && !isLimited) {
-        await trackArticleView(article.id, user?.id);
-        setHasTrackedView(true);
+        const success = await trackArticleView(article.id, user?.id);
+        if (success) {
+          console.log("View tracked successfully"); // Debug log
+          setHasTrackedView(true);
+        }
       }
     };
 
@@ -88,7 +95,7 @@ const ArticlePage = () => {
           <div className="bg-neutral-800 p-8 rounded-lg max-w-lg mx-auto">
             <h2 className="text-2xl font-bold mb-4">Daily Reading Limit Reached</h2>
             <p className="mb-6 text-gray-400">
-              You've reached your daily limit of 5 free articles. Sign in to get unlimited access to all our articles.
+              You've reached your daily limit of free articles. Sign in to get unlimited access to all our articles.
             </p>
             <Button
               onClick={() => navigate('/auth')}
@@ -98,8 +105,6 @@ const ArticlePage = () => {
             </Button>
           </div>
         </div>
-
-        <ArticleViewCounter />
       </div>
     );
   }

@@ -11,6 +11,7 @@ import ArticleHeader from "@/components/article/ArticleHeader";
 import ArticleContent from "@/components/article/ArticleContent";
 import ArticleLimitMessage from "@/components/article/ArticleLimitMessage";
 import ArticleViewTracker from "@/components/article/ArticleViewTracker";
+import PageFooter from "@/components/PageFooter";
 
 const ArticlePage = () => {
   const { id } = useParams();
@@ -64,21 +65,25 @@ const ArticlePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white pb-20">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-black text-gray-900 dark:text-white">
       <ArticleHeader />
 
-      {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-        </div>
-      ) : (
-        <>
-          <ArticleContent article={article} />
-          <ArticleViewTracker articleId={id} isLimited={isLimited} />
-        </>
-      )}
+      <div className="flex-grow">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+          </div>
+        ) : (
+          <>
+            <ArticleContent article={article} />
+            <ArticleViewTracker articleId={id} isLimited={isLimited} />
+          </>
+        )}
 
-      <ArticleViewCounter />
+        <ArticleViewCounter />
+      </div>
+      
+      <PageFooter />
     </div>
   );
 };

@@ -67,10 +67,10 @@ export function NewsHero({ articles }: NewsHeroProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="h-8 w-8 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center text-gray-800 font-semibold">
-                {article.author_name?.charAt(0) || 'A'}
+                {article.author_name ? article.author_name.charAt(0) : 'AI'}
               </div>
               <div>
-                <p className="text-sm text-white font-medium">{article.author_name || "AI Author"}</p>
+                <p className="text-sm text-white font-medium">{article.author_name || "AI Generated"}</p>
                 <p className="text-xs text-gray-300">{formatPublishedDate(article.published_date)}</p>
               </div>
             </div>
@@ -93,13 +93,19 @@ export function NewsHero({ articles }: NewsHeroProps) {
       {/* Navigation Controls */}
       <div className="absolute bottom-4 right-4 flex space-x-2 z-30">
         <button 
-          onClick={() => setCurrentIndex(prev => prev === 0 ? articles.length - 1 : prev - 1)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setCurrentIndex(prev => prev === 0 ? articles.length - 1 : prev - 1);
+          }}
           className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
         >
           <ChevronLeft className="h-5 w-5 text-white" />
         </button>
         <button 
-          onClick={() => setCurrentIndex(prev => prev === articles.length - 1 ? 0 : prev + 1)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setCurrentIndex(prev => prev === articles.length - 1 ? 0 : prev + 1);
+          }}
           className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
         >
           <ChevronRight className="h-5 w-5 text-white" />
@@ -114,7 +120,10 @@ export function NewsHero({ articles }: NewsHeroProps) {
             className={`w-2 h-2 rounded-full transition-all ${
               i === currentIndex ? 'bg-white w-6' : 'bg-white/50'
             }`}
-            onClick={() => setCurrentIndex(i)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentIndex(i);
+            }}
           />
         ))}
       </div>

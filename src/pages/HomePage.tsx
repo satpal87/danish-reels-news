@@ -8,6 +8,7 @@ import { formatPublishedDate } from '@/lib/utils';
 import { NewsHero } from '@/components/blocks/NewsHero';
 import { ArticleSection } from '@/components/ArticleSection';
 import { NewsHeader } from '@/components/NewsHeader';
+import PageFooter from '@/components/PageFooter';
 
 const HomePage = () => {
   const [trendingNews, setTrendingNews] = useState<NewsArticle[]>([]);
@@ -83,7 +84,7 @@ const HomePage = () => {
       <NewsHeader />
       
       {/* Content */}
-      <main className="flex-1 pb-24 max-w-7xl mx-auto px-4 sm:px-6 w-full">
+      <main className="flex-1 pb-12 max-w-7xl mx-auto px-4 sm:px-6 w-full">
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -131,6 +132,9 @@ const HomePage = () => {
           </>
         )}
       </main>
+      
+      {/* Footer */}
+      <PageFooter />
     </div>
   );
 };

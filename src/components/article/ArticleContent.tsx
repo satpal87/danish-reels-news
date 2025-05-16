@@ -1,5 +1,5 @@
 
-import { Clock, ExternalLink, ThumbsUp, Bookmark, Share2 } from "lucide-react";
+import { Clock, ExternalLink, ThumbsUp, Bookmark, Share2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPublishedDate } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
           className="mt-4"
           onClick={() => navigate(-1)}
         >
-          Go Back
+          <ArrowLeft className="mr-2 h-4 w-4" /> Go Back
         </Button>
       </div>
     );
@@ -48,10 +48,10 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
       <div className="flex items-center justify-between pb-6 border-b border-gray-200 dark:border-gray-800 mb-8">
         <div className="flex items-center">
           <div className="h-10 w-10 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center text-gray-800 font-semibold">
-            {article.author_name?.charAt(0) || 'A'}
+            {article.author_name ? article.author_name.charAt(0) : 'AI'}
           </div>
           <div className="ml-3">
-            <p className="font-medium">{article.author_name || "AI Author"}</p>
+            <p className="font-medium">{article.author_name || "AI Generated"}</p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               {formatPublishedDate(article.published_date)}
             </p>

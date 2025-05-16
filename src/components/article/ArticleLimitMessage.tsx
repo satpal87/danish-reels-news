@@ -1,39 +1,24 @@
 
-import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 const ArticleLimitMessage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-black text-white pb-20">
-      <header className="sticky top-0 p-4 bg-black border-b border-neutral-800 z-50">
-        <div className="flex items-center justify-between">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => navigate(-1)}
-          >
-            <ArrowLeft />
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 flex flex-col items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 text-center">
+        <h2 className="text-2xl font-bold mb-4">Daily Limit Reached</h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
+          You've reached your daily limit of 5 free articles. Sign up or subscribe to continue reading unlimited articles.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Button variant="outline" onClick={() => navigate(-1)}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Go Back
           </Button>
-          <div className="font-medium">Article</div>
-          <div className="w-8"></div>
-        </div>
-      </header>
-
-      <div className="px-4 py-10 flex flex-col items-center justify-center text-center">
-        <div className="bg-neutral-800 p-8 rounded-lg max-w-lg mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Daily Reading Limit Reached</h2>
-          <p className="mb-6 text-gray-400">
-            You've reached your daily limit of free articles. Sign in to get unlimited access to all our articles.
-          </p>
-          <Button
-            onClick={() => navigate('/auth')}
-            className="w-full bg-blue-600 hover:bg-blue-700"
-          >
-            Sign In For Unlimited Access
-          </Button>
+          <Button onClick={() => navigate("/auth")}>Sign Up Now</Button>
         </div>
       </div>
     </div>

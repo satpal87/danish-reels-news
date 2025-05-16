@@ -150,7 +150,7 @@ const CategoriesPage = () => {
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
                     <div className="flex items-center">
                       <div className="h-6 w-6 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex items-center justify-center text-gray-800 dark:text-gray-200 text-xs">
-                        {article.author_name?.charAt(0) || 'A'}
+                        {article.author_name ? article.author_name.charAt(0) : 'AI'}
                       </div>
                       <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
                         {formatPublishedDate(article.published_date)}
@@ -187,6 +187,6 @@ const CategoriesPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default CategoriesPage;

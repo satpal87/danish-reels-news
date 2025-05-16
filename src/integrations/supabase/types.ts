@@ -12,6 +12,7 @@ export type Database = {
       news_articles: {
         Row: {
           active: boolean | null
+          author_name: string | null
           category: string | null
           created_at: string | null
           html: string | null
@@ -30,6 +31,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean | null
+          author_name?: string | null
           category?: string | null
           created_at?: string | null
           html?: string | null
@@ -48,6 +50,7 @@ export type Database = {
         }
         Update: {
           active?: boolean | null
+          author_name?: string | null
           category?: string | null
           created_at?: string | null
           html?: string | null

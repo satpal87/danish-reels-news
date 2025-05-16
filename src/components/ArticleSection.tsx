@@ -67,10 +67,10 @@ export function ArticleSection({ title, articles, className }: ArticleSectionPro
               
               <div className="flex items-center mt-auto pt-3 border-t border-gray-100 dark:border-gray-800">
                 <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex items-center justify-center text-gray-800 dark:text-gray-200">
-                  {article.author_name?.charAt(0) || 'A'}
+                  {article.author_name ? article.author_name.charAt(0) : 'AI'}
                 </div>
                 <div className="ml-2">
-                  <p className="text-sm font-medium">{article.author_name || "AI Author"}</p>
+                  <p className="text-sm font-medium">{article.author_name || "AI Generated"}</p>
                 </div>
               </div>
             </div>

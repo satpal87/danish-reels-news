@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 export interface NewsArticle {
@@ -17,6 +16,7 @@ export interface NewsArticle {
   rate: number | null;
   active: boolean;
   created_at: string;
+  author_name: string | null;
 }
 
 export async function getNewsArticles(): Promise<NewsArticle[]> {

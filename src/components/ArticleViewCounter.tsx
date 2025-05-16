@@ -17,8 +17,8 @@ export function ArticleViewCounter() {
       
       try {
         const count = await getRemainingViews();
+        console.log('Fetched remaining views:', count); // Debug log to verify count
         setRemainingViews(count);
-        console.log('Remaining views:', count); // Debug log to verify count
       } catch (error) {
         console.error('Error fetching remaining views:', error);
       }
@@ -27,7 +27,7 @@ export function ArticleViewCounter() {
     fetchRemainingViews();
     
     // Refresh the counter when component mounts and periodically
-    const interval = setInterval(fetchRemainingViews, 5000); // Check more frequently (every 5 seconds)
+    const interval = setInterval(fetchRemainingViews, 3000); // Check more frequently (every 3 seconds)
     
     return () => clearInterval(interval);
   }, [user]);

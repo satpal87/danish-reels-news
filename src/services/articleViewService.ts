@@ -18,7 +18,7 @@ export async function trackArticleView(articleId: string, userId?: string | null
     const sessionId = getSessionId();
     console.log('Tracking article view:', { articleId, userId, sessionId });
 
-    // Use RPC call instead of direct table operations
+    // Use RPC call to track the view in the database
     const { error } = await supabase.rpc('track_article_view', { 
       p_article_id: articleId, 
       p_user_id: userId || null,
@@ -44,7 +44,7 @@ export async function getRemainingViews(): Promise<number> {
     const sessionId = getSessionId();
     console.log('Getting remaining views for session:', sessionId);
     
-    // Use RPC call for count
+    // Use RPC call to get the count from the database
     const { data, error } = await supabase.rpc('get_remaining_article_views', {
       p_session_id: sessionId
     });
@@ -77,7 +77,7 @@ export async function hasReachedDailyLimit(): Promise<boolean> {
 // Get user's reading history
 export async function getUserReadingHistory(userId: string): Promise<any[]> {
   try {
-    // Use RPC call for reading history
+    // Use RPC call to get reading history from the database
     const { data, error } = await supabase.rpc('get_user_reading_history', {
       p_user_id: userId
     });

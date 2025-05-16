@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -45,9 +44,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-// Temporarily modified to allow any logged in user
+// Admin route component
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
+  const { isAdmin, user, loading } = useAuth();
   
   if (loading) {
     return <div className="flex justify-center items-center h-screen">
@@ -55,6 +54,7 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
     </div>;
   }
   
+  // Allow any logged in user for now, but keep the isAdmin check for future use
   if (!user) {
     return <Navigate to="/auth" replace />;
   }

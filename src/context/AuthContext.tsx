@@ -69,6 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
       
+      console.log("Admin check result:", data);
       setIsAdmin(!!data);
     } catch (error) {
       console.error('Error checking admin status:', error);
@@ -84,6 +85,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (error) throw error;
+      
+      toast({
+        title: "Login successful",
+        description: "Welcome back!",
+      });
     } catch (error: any) {
       toast({
         title: "Login failed",
@@ -120,6 +126,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
+      toast({
+        title: "Signed out",
+        description: "You have been successfully logged out",
+      });
     } catch (error: any) {
       toast({
         title: "Sign out failed",

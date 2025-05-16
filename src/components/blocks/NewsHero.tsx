@@ -67,10 +67,10 @@ export function NewsHero({ articles }: NewsHeroProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="h-8 w-8 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center text-gray-800 font-semibold">
-                {article.author?.charAt(0) || 'A'}
+                {article.author_name?.charAt(0) || 'A'}
               </div>
               <div>
-                <p className="text-sm text-white font-medium">{article.author || "AI Author"}</p>
+                <p className="text-sm text-white font-medium">{article.author_name || "AI Author"}</p>
                 <p className="text-xs text-gray-300">{formatPublishedDate(article.published_date)}</p>
               </div>
             </div>

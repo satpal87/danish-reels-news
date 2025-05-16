@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,6 +18,7 @@ import AuthPage from "./pages/AuthPage";
 import ReadingHistoryPage from "./pages/ReadingHistoryPage";
 import { useIsMobile } from './hooks/use-mobile';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import Footer from './components/Footer';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -66,10 +68,10 @@ const AppContent = () => {
   const isMobile = useIsMobile();
   
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen flex flex-col">
       {!isMobile && <MainNavigation />}
       
-      <div className={`${!isMobile ? 'pt-16' : ''} pb-16`}>
+      <div className={`${!isMobile ? 'pt-16' : ''} pb-16 flex-grow`}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/article/:id" element={<ArticlePage />} />
@@ -96,6 +98,9 @@ const AppContent = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
+      
+      {/* Footer is displayed on all pages */}
+      <Footer />
       
       {isMobile && <MainNavigation />}
     </div>

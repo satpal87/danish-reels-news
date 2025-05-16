@@ -27,7 +27,7 @@ export function ArticleViewCounter() {
     fetchRemainingViews();
     
     // Refresh the counter when component mounts and periodically
-    const interval = setInterval(fetchRemainingViews, 10000); // Check more frequently (every 10 seconds)
+    const interval = setInterval(fetchRemainingViews, 5000); // Check more frequently (every 5 seconds)
     
     return () => clearInterval(interval);
   }, [user]);

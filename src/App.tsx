@@ -45,9 +45,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-// Admin route component
+// Temporarily modified to allow any logged in user
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAdmin, loading } = useAuth();
+  const { user, loading } = useAuth();
   
   if (loading) {
     return <div className="flex justify-center items-center h-screen">
@@ -55,8 +55,8 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
     </div>;
   }
   
-  if (!isAdmin) {
-    return <Navigate to="/" replace />;
+  if (!user) {
+    return <Navigate to="/auth" replace />;
   }
   
   return <>{children}</>;

@@ -21,7 +21,7 @@ export async function trackArticleView(articleId: string, userId?: string | null
     // Use RPC call instead of direct table operations
     const { error } = await supabase.rpc('track_article_view', { 
       p_article_id: articleId, 
-      p_user_id: userId,
+      p_user_id: userId || null,
       p_session_id: !userId ? sessionId : null
     });
 
@@ -30,6 +30,7 @@ export async function trackArticleView(articleId: string, userId?: string | null
       return false;
     }
 
+    console.log('View tracked successfully');
     return true;
   } catch (error) {
     console.error('Error in trackArticleView:', error);

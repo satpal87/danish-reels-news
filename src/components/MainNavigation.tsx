@@ -51,15 +51,15 @@ const MainNavigation = () => {
             </Link>
           ))}
           {user ? (
-            <Link
-              to="/history"
-              className={`flex flex-col items-center justify-center w-16 h-full transition-colors ${
-                isActive('/history') ? 'text-blue-500' : 'text-gray-500 hover:text-gray-300'
-              }`}
-            >
-              <FileText className="w-5 h-5" />
-              <span className="text-xs mt-1">History</span>
-            </Link>
+            <div className="flex flex-col justify-center items-center">
+              <button 
+                onClick={handleSignOut}
+                className="flex flex-col items-center justify-center w-16 h-full text-gray-500 hover:text-gray-300"
+              >
+                <LogOut className="w-5 h-5" />
+                <span className="text-xs mt-1">Logout</span>
+              </button>
+            </div>
           ) : (
             <Link
               to="/auth"
@@ -119,12 +119,10 @@ const MainNavigation = () => {
                     <FileText className="mr-2 h-4 w-4" />
                     <span>Reading History</span>
                   </DropdownMenuItem>
-                  {isAdmin && (
-                    <DropdownMenuItem onClick={() => navigate('/admin')}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Admin Dashboard</span>
-                    </DropdownMenuItem>
-                  )}
+                  <DropdownMenuItem onClick={() => navigate('/admin')}>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Admin Dashboard</span>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />

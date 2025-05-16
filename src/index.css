@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -71,9 +73,24 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+  
+  html {
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
   }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* Custom Danish News Colors */
+.text-danish-red {
+  color: #C8102E;
+}
+
+.bg-danish-red {
+  background-color: #C8102E;
 }
 
 /* Hide scrollbar but keep functionality */
@@ -84,4 +101,33 @@
 .hide-scrollbar {
   -ms-overflow-style: none;  /* For IE and Edge */
   scrollbar-width: none;  /* For Firefox */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Card hover effects */
+.card-hover {
+  @apply transition-all duration-300;
+}
+
+.card-hover:hover {
+  @apply shadow-lg transform translate-y-[-5px];
+}
+
+/* Story progress bar */
+.story-progress-bar {
+  @apply absolute top-0 left-0 right-0 h-1 bg-gray-200 z-20;
+}
+
+.story-progress {
+  @apply h-full bg-blue-600;
+  transition: width 0.1s linear;
 }

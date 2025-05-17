@@ -7,19 +7,19 @@ const ArticleHeader = () => {
   const navigate = useNavigate();
   
   return (
-    <header className="sticky top-0 p-4 bg-black border-b border-neutral-800 z-50">
-      <div className="flex items-center justify-between">
+    <div className="sticky top-16 z-40 p-4 bg-black border-b border-neutral-800">
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
         <Button 
           variant="ghost" 
           size="icon"
           onClick={() => navigate(-1)}
         >
-          <ArrowLeft />
+          <ArrowLeft className="text-white" />
         </Button>
-        <div className="font-medium">Article</div>
+        <div className="font-medium text-white">Article</div>
         <div className="w-8"></div>
       </div>
-    </header>
+    </div>
   );
 };
 

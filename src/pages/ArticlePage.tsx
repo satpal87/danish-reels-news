@@ -82,8 +82,6 @@ const ArticlePage = () => {
 
         <ArticleViewCounter />
       </div>
-      
-      <PageFooter />
     </div>
   );
 };

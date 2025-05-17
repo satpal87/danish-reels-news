@@ -1,105 +1,128 @@
 
-import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Youtube, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
+import Logo from "@/components/Logo";
 
 const PageFooter = () => {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer className="bg-gray-900 text-gray-200 pt-12 pb-8 border-t border-gray-800">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-8">
-          {/* Logo and About */}
+    <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1">
-            <h2 className="text-xl font-bold mb-4">Danish News</h2>
-            <p className="text-gray-400 mb-4">
-              Your trusted source for AI-powered news in Danish and English. Stay informed with the latest stories from Denmark and around the world.
+            <Logo size="medium" />
+            <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+              Your trusted source for Danish news and information in English. Stay updated with the latest stories.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+            <div className="flex space-x-4 mt-6">
+              <a href="#" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
                 <Youtube size={20} />
               </a>
             </div>
           </div>
           
-          {/* Quick Links */}
-          <div className="col-span-1">
-            <h3 className="font-semibold text-white mb-4">Quick Links</h3>
-            <ul className="space-y-2">
+          <div>
+            <h3 className="font-semibold text-black dark:text-white mb-4">Categories</h3>
+            <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link>
+                <Link to="/categories?filter=news" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+                  News
+                </Link>
               </li>
               <li>
-                <Link to="/categories" className="text-gray-400 hover:text-white transition-colors">Categories</Link>
+                <Link to="/categories?filter=sports" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+                  Sports
+                </Link>
               </li>
               <li>
-                <Link to="/timeline" className="text-gray-400 hover:text-white transition-colors">Timeline</Link>
+                <Link to="/categories?filter=business" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+                  Business
+                </Link>
               </li>
               <li>
-                <Link to="/saved" className="text-gray-400 hover:text-white transition-colors">Saved Articles</Link>
-              </li>
-            </ul>
-          </div>
-          
-          {/* Categories */}
-          <div className="col-span-1">
-            <h3 className="font-semibold text-white mb-4">Categories</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/categories?filter=Food" className="text-gray-400 hover:text-white transition-colors">Food</Link>
+                <Link to="/categories?filter=technology" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+                  Technology
+                </Link>
               </li>
               <li>
-                <Link to="/categories?filter=Technology" className="text-gray-400 hover:text-white transition-colors">Technology</Link>
-              </li>
-              <li>
-                <Link to="/categories?filter=Politics" className="text-gray-400 hover:text-white transition-colors">Politics</Link>
-              </li>
-              <li>
-                <Link to="/categories?filter=Sport" className="text-gray-400 hover:text-white transition-colors">Sport</Link>
-              </li>
-              <li>
-                <Link to="/categories?filter=Local" className="text-gray-400 hover:text-white transition-colors">Local</Link>
+                <Link to="/categories?filter=entertainment" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+                  Entertainment
+                </Link>
               </li>
             </ul>
           </div>
           
-          {/* Subscribe */}
-          <div className="col-span-1">
-            <h3 className="font-semibold text-white mb-4">Subscribe</h3>
-            <p className="text-gray-400 mb-4">
-              Get the latest news delivered directly to your inbox.
+          <div>
+            <h3 className="font-semibold text-black dark:text-white mb-4">Quick Links</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link to="/about" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/timeline" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+                  Timeline
+                </Link>
+              </li>
+              <li>
+                <Link to="/" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+                  Terms of Service
+                </Link>
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="font-semibold text-black dark:text-white mb-4">Subscribe</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Stay updated with our latest news and updates.
             </p>
             <div className="flex">
               <input 
                 type="email" 
-                placeholder="Your email" 
-                className="bg-gray-800 text-sm border border-gray-700 rounded-l px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 text-gray-200 flex-grow"
+                placeholder="Your email"
+                className="px-4 py-2 text-sm rounded-l-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
-              <button className="bg-blue-600 text-white px-3 py-2 rounded-r hover:bg-blue-700 transition-colors">
+              <button className="bg-blue-600 text-white px-4 py-2 rounded-r-md text-sm hover:bg-blue-700">
                 <Mail size={16} />
               </button>
             </div>
           </div>
         </div>
         
-        {/* Bottom section */}
-        <div className="pt-6 border-t border-gray-800 text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0">
-            © {currentYear} Danish News. All rights reserved.
-          </div>
-          <div className="flex space-x-4">
-            <Link to="#" className="hover:text-gray-300">Terms</Link>
-            <Link to="#" className="hover:text-gray-300">Privacy</Link>
-            <Link to="#" className="hover:text-gray-300">Cookies</Link>
+        <div className="border-t border-gray-200 dark:border-gray-800 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            © {new Date().getFullYear()} DanishNews. All rights reserved.
+          </p>
+          <div className="flex space-x-6 mt-4 md:mt-0 text-sm">
+            <Link to="/" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+              Privacy Policy
+            </Link>
+            <Link to="/" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+              Terms of Service
+            </Link>
+            <Link to="/" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
+              Cookie Policy
+            </Link>
           </div>
         </div>
       </div>

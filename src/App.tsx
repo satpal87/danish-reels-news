@@ -9,15 +9,15 @@ import CategoriesPage from "./pages/CategoriesPage";
 import SavedPage from "./pages/SavedPage";
 import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
-import MainNavigation from "./components/MainNavigation";
 import AdminPage from "./pages/AdminPage";
 import ArticlePage from "./pages/ArticlePage";
 import TimelinePage from "./pages/TimelinePage";
 import AuthPage from "./pages/AuthPage";
 import ReadingHistoryPage from "./pages/ReadingHistoryPage";
-import { useIsMobile } from './hooks/use-mobile';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import Footer from './components/Footer';
+import NavBar from './components/NavBar';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -64,13 +64,11 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 const AppContent = () => {
-  const isMobile = useIsMobile();
-  
   return (
     <div className="relative min-h-screen flex flex-col">
-      {!isMobile && <MainNavigation />}
+      <NavBar />
       
-      <div className={`${!isMobile ? 'pt-16' : ''} pb-16 flex-grow`}>
+      <div className="flex-grow">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/article/:id" element={<ArticlePage />} />
@@ -98,10 +96,7 @@ const AppContent = () => {
         </Routes>
       </div>
       
-      {/* Footer is displayed on all pages */}
       <Footer />
-      
-      {isMobile && <MainNavigation />}
     </div>
   );
 };

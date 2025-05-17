@@ -105,14 +105,17 @@ const TimelinePage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-black">
+      <div className="flex justify-center items-center min-h-[calc(100vh-64px)] bg-black">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen w-full bg-black pt-16 pb-20">
+    <div className="min-h-screen w-full bg-black pt-4 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <h1 className="text-3xl font-bold text-white mb-6">Timeline</h1>
+      </div>
       {timelineData.length > 0 ? (
         <Timeline data={timelineData} />
       ) : (

@@ -7,7 +7,6 @@ import SearchBar from '@/components/SearchBar';
 import { formatPublishedDate } from '@/lib/utils';
 import { NewsHero } from '@/components/blocks/NewsHero';
 import { ArticleSection } from '@/components/ArticleSection';
-import { NewsHeader } from '@/components/NewsHeader';
 import PageFooter from '@/components/PageFooter';
 
 const HomePage = () => {
@@ -80,9 +79,6 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
-      {/* App Header */}
-      <NewsHeader />
-      
       {/* Content */}
       <main className="flex-1 pb-12 max-w-7xl mx-auto px-4 sm:px-6 w-full">
         {loading ? (
@@ -132,9 +128,6 @@ const HomePage = () => {
           </>
         )}
       </main>
-      
-      {/* Footer */}
-      <PageFooter />
     </div>
   );
 };

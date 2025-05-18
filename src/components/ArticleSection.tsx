@@ -22,19 +22,19 @@ export function ArticleSection({ title, articles, className }: ArticleSectionPro
 
   return (
     <section className={cn("py-4 md:py-6", className)}>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold">
-          <span className="inline-block border-b-2 border-blue-600 pb-1">{title}</span>
+          <span className="inline-block border-b-2 border-danish-red pb-1">{title}</span>
         </h2>
         <button 
           onClick={() => navigate('/categories')}
-          className="flex items-center text-sm text-blue-600 dark:text-blue-400 hover:underline"
+          className="flex items-center text-sm text-danish-red dark:text-danish-red hover:underline"
         >
           View all <ArrowRight className="ml-1 h-4 w-4" />
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {articles.map((article) => (
           <div 
             key={article.id}
@@ -51,7 +51,7 @@ export function ArticleSection({ title, articles, className }: ArticleSectionPro
             
             <div className="flex flex-col flex-grow p-4">
               <div className="flex items-center mb-3 justify-between">
-                <span className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-100 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                <span className="bg-red-50 text-danish-red dark:bg-red-900/20 dark:text-red-300 text-xs font-medium px-2.5 py-0.5 rounded-full">
                   {article.category || "News"}
                 </span>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -59,7 +59,7 @@ export function ArticleSection({ title, articles, className }: ArticleSectionPro
                 </span>
               </div>
               
-              <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-danish-red dark:group-hover:text-danish-red transition-colors">
                 {article.title_en || article.title}
               </h3>
               
@@ -68,7 +68,7 @@ export function ArticleSection({ title, articles, className }: ArticleSectionPro
               </p>
               
               <div className="flex items-center mt-auto pt-3 border-t border-gray-100 dark:border-gray-800">
-                <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900 overflow-hidden flex items-center justify-center text-blue-800 dark:text-blue-100">
+                <div className="h-8 w-8 rounded-full bg-red-100 dark:bg-red-900/30 overflow-hidden flex items-center justify-center text-danish-red dark:text-red-300">
                   {article.author_name ? article.author_name.charAt(0) : 'A'}
                 </div>
                 <div className="ml-2">

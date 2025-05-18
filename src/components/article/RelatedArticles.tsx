@@ -18,18 +18,20 @@ const RelatedArticles = ({ articles }: RelatedArticlesProps) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-4 md:py-6 mb-16">
+    <div className="max-w-4xl mx-auto px-4 py-6 mb-16">
       <div className="border-t border-gray-200 dark:border-gray-800 pt-6 mb-4">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl md:text-2xl font-bold">Related Articles</h2>
-          <Link to="/categories" className="text-blue-600 dark:text-blue-400 flex items-center text-sm font-medium">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl md:text-2xl font-bold">
+            <span className="inline-block border-b-2 border-danish-red">Related Articles</span>
+          </h2>
+          <Link to="/categories" className="text-danish-red dark:text-danish-red flex items-center text-sm font-medium">
             More <ArrowRight className="ml-1 h-4 w-4" />
           </Link>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {articles.map((article) => (
-            <Card key={article.id} className="hover:shadow-md transition-shadow bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+            <Card key={article.id} className="hover:shadow-md transition-shadow bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden">
               <Link to={`/article/${article.id}`} className="flex h-full">
                 <div className={`${isMobile ? 'w-1/3' : 'w-2/5'} aspect-[4/3] overflow-hidden`}>
                   <img 
@@ -40,7 +42,7 @@ const RelatedArticles = ({ articles }: RelatedArticlesProps) => {
                 </div>
                 <CardContent className={`${isMobile ? 'w-2/3 p-3' : 'w-3/5 p-4'}`}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-100 rounded-full px-2 py-0.5">
+                    <span className="text-xs bg-red-50 text-danish-red dark:bg-red-900/20 dark:text-red-300 rounded-full px-2 py-0.5">
                       {article.category || "News"}
                     </span>
                     <span className="text-xs text-gray-500 dark:text-gray-400">

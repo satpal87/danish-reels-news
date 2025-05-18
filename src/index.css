@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -82,6 +82,10 @@
   
   body {
     @apply bg-background text-foreground antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
   }
 }
 
@@ -179,4 +183,34 @@
   @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium transition-colors;
   @apply bg-gray-100 text-gray-800 hover:bg-gray-200;
   @apply dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700;
+}
+
+/* Typography improvements */
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  font-family: 'Playfair Display', serif;
+}
+
+.prose p {
+  @apply text-gray-700 dark:text-gray-300;
+  line-height: 1.8;
+}
+
+/* Card styling */
+.news-card {
+  @apply bg-white dark:bg-gray-900 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800;
+  @apply transition-all duration-300 hover:shadow-md;
+}
+
+/* Category badges */
+.category-badge {
+  @apply inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-100;
+}
+
+/* Authors and metadata */
+.author-avatar {
+  @apply h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900 overflow-hidden flex items-center justify-center text-blue-800 dark:text-blue-100;
+}
+
+.metadata-text {
+  @apply text-xs text-gray-500 dark:text-gray-400;
 }

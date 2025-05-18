@@ -21,7 +21,7 @@ export function ArticleSection({ title, articles, className }: ArticleSectionPro
   }
 
   return (
-    <section className={cn("py-6", className)}>
+    <section className={cn("py-4 md:py-6", className)}>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold">
           <span className="inline-block border-b-2 border-blue-600 pb-1">{title}</span>
@@ -34,7 +34,7 @@ export function ArticleSection({ title, articles, className }: ArticleSectionPro
         </button>
       </div>
 
-      <div className={`grid grid-cols-1 ${isMobile ? 'gap-4' : 'sm:grid-cols-2 lg:grid-cols-3 gap-6'}`}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {articles.map((article) => (
           <div 
             key={article.id}
@@ -50,11 +50,11 @@ export function ArticleSection({ title, articles, className }: ArticleSectionPro
             </div>
             
             <div className="flex flex-col flex-grow p-4">
-              <div className="flex items-center mb-3">
-                <span className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs font-medium px-2 py-1 rounded">
+              <div className="flex items-center mb-3 justify-between">
+                <span className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-100 text-xs font-medium px-2.5 py-0.5 rounded-full">
                   {article.category || "News"}
                 </span>
-                <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   {formatPublishedDate(article.published_date)}
                 </span>
               </div>
@@ -68,8 +68,8 @@ export function ArticleSection({ title, articles, className }: ArticleSectionPro
               </p>
               
               <div className="flex items-center mt-auto pt-3 border-t border-gray-100 dark:border-gray-800">
-                <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden flex items-center justify-center text-gray-800 dark:text-gray-200">
-                  {article.author_name ? article.author_name.charAt(0) : 'AI'}
+                <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900 overflow-hidden flex items-center justify-center text-blue-800 dark:text-blue-100">
+                  {article.author_name ? article.author_name.charAt(0) : 'A'}
                 </div>
                 <div className="ml-2">
                   <p className="text-sm font-medium">{article.author_name || "AI Generated"}</p>

@@ -1,5 +1,5 @@
 
-import { Clock, ExternalLink, ThumbsUp, Bookmark, Share2, ArrowLeft } from "lucide-react";
+import { Clock, ExternalLink, ThumbsUp, Bookmark, Share2, ArrowLeft, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPublishedDate } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
@@ -27,20 +27,20 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 mt-12">
+    <div className="max-w-4xl mx-auto px-4 py-6 md:py-8 mt-4 md:mt-8">
       {/* Back button */}
       <Button 
         variant="ghost" 
         size="sm"
         onClick={() => navigate(-1)} 
-        className="mb-6"
+        className="mb-4 md:mb-6 -ml-2"
       >
         <ArrowLeft className="mr-2 h-4 w-4" /> Back
       </Button>
       
       {/* Category and Reading Time */}
       <div className="flex items-center justify-between mb-4">
-        <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">
+        <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100 text-xs font-medium px-2.5 py-1 rounded-full">
           {article.category || "News"}
         </span>
         <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm">
@@ -50,14 +50,14 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
       </div>
 
       {/* Title */}
-      <h1 className="text-3xl md:text-4xl font-serif font-bold mb-6 leading-tight">
+      <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold mb-4 leading-tight">
         {article.title_en || article.title}
       </h1>
 
       {/* Author and Published date */}
-      <div className="flex items-center justify-between pb-6 border-b border-gray-200 dark:border-gray-800 mb-8">
+      <div className="flex items-center justify-between pb-6 border-b border-gray-200 dark:border-gray-800 mb-6">
         <div className="flex items-center">
-          <div className="h-10 w-10 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center text-gray-800 font-semibold">
+          <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 overflow-hidden flex items-center justify-center text-blue-800 dark:text-blue-100 font-semibold">
             {article.author_name ? article.author_name.charAt(0) : 'AI'}
           </div>
           <div className="ml-3">
@@ -68,21 +68,24 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
           </div>
         </div>
         
-        <div className="flex space-x-2">
-          <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Save">
-            <Bookmark className="h-5 w-5" />
+        <div className="flex space-x-1">
+          <button className="p-1.5 md:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Save">
+            <Bookmark className="h-4 w-4 md:h-5 md:w-5" />
           </button>
-          <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Like">
-            <ThumbsUp className="h-5 w-5" />
+          <button className="p-1.5 md:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Like">
+            <ThumbsUp className="h-4 w-4 md:h-5 md:w-5" />
           </button>
-          <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Share">
-            <Share2 className="h-5 w-5" />
+          <button className="p-1.5 md:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Comment">
+            <MessageCircle className="h-4 w-4 md:h-5 md:w-5" />
+          </button>
+          <button className="p-1.5 md:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Share">
+            <Share2 className="h-4 w-4 md:h-5 md:w-5" />
           </button>
         </div>
       </div>
 
       {/* Featured Image */}
-      <div className="mb-8 rounded-xl overflow-hidden aspect-[16/9]">
+      <div className="mb-6 rounded-xl overflow-hidden aspect-[16/9]">
         <img
           src={article.image || 'https://placehold.co/1200x800?text=No+Image'}
           alt={article.title_en || article.title}
@@ -91,7 +94,7 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
       </div>
 
       {/* Content */}
-      <div className="prose prose-lg dark:prose-invert max-w-none mb-10">
+      <div className="prose prose-lg dark:prose-invert max-w-none mb-8 prose-headings:font-serif prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-lg">
         {article.html ? (
           <div dangerouslySetInnerHTML={{ __html: article.html }} />
         ) : (
@@ -122,7 +125,7 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
             {(article.tags || ['News', 'Denmark', 'AI']).map((tag: string, idx: number) => (
               <span 
                 key={idx} 
-                className="bg-gray-100 dark:bg-gray-800 py-1 px-3 rounded-full text-sm"
+                className="bg-gray-50 dark:bg-gray-800 py-1.5 px-3 rounded-full text-sm text-gray-600 dark:text-gray-300"
               >
                 #{tag}
               </span>

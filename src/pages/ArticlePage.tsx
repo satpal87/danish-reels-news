@@ -78,7 +78,7 @@ const ArticlePage = () => {
         .eq("status", "published")
         .neq("id", id)
         .order("published_date", { ascending: false })
-        .limit(4);
+        .limit(6);
 
       if (error) {
         console.error("Error fetching related articles:", error);
@@ -104,9 +104,9 @@ const ArticlePage = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-black text-gray-900 dark:text-white">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <NavBar />
-      <div className="flex-grow pt-16 pb-24 md:pb-0">
+      <div className="flex-grow pt-16 pb-20">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -114,7 +114,9 @@ const ArticlePage = () => {
         ) : (
           <>
             <ArticleContent article={article} />
-            <RelatedArticles articles={relatedArticles || []} />
+            {relatedArticles && relatedArticles.length > 0 && (
+              <RelatedArticles articles={relatedArticles} />
+            )}
             <ArticleViewTracker articleId={id} isLimited={isLimited} />
           </>
         )}

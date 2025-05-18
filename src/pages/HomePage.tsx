@@ -6,7 +6,6 @@ import { getNewsArticles, NewsArticle } from '@/services/newsService';
 import { formatPublishedDate } from '@/lib/utils';
 import { NewsHero } from '@/components/blocks/NewsHero';
 import { ArticleSection } from '@/components/ArticleSection';
-import PageFooter from '@/components/PageFooter';
 import NavBar from '@/components/NavBar';
 import { TubelightNavbar } from '@/components/ui/tubelight-navbar';
 import { Home, Bookmark, Search, User } from 'lucide-react';
@@ -95,7 +94,7 @@ const HomePage = () => {
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <NavBar />
       {/* Content */}
-      <main className="flex-1 pb-24 md:pb-12 max-w-7xl mx-auto px-4 sm:px-6 w-full pt-16">
+      <main className="flex-1 pb-20 md:pb-12 max-w-7xl mx-auto px-4 sm:px-6 w-full pt-16">
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -103,19 +102,19 @@ const HomePage = () => {
         ) : (
           <>
             {/* Hero Section with Featured News */}
-            <section className="mt-6">
+            <section className="mt-4 md:mt-6">
               <NewsHero articles={trendingNews.slice(0, 3)} />
             </section>
             
             {/* Categories Pills */}
-            <div className="flex overflow-x-auto gap-2 py-6 hide-scrollbar">
-              {['Food', 'Animal', 'Car', 'Sport', 'Music', 'Technology', 'Fashion'].map((category) => (
+            <div className="flex overflow-x-auto gap-2 py-4 md:py-6 hide-scrollbar">
+              {['Politics', 'Business', 'Technology', 'Sports', 'Entertainment', 'Health'].map((category) => (
                 <button 
                   key={category}
                   onClick={() => navigate(`/categories?filter=${category.toLowerCase()}`)}
                   className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-sm font-medium rounded-full whitespace-nowrap hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 >
-                  #{category}
+                  {category}
                 </button>
               ))}
             </div>
@@ -124,21 +123,21 @@ const HomePage = () => {
             <ArticleSection 
               title="Popular Posts" 
               articles={trendingNews} 
-              className="mb-12" 
+              className="mb-8 md:mb-12" 
             />
             
             {/* New Posts Section */}
             <ArticleSection 
-              title="New Posts" 
+              title="Latest News" 
               articles={[...sportsNews, ...localNews].slice(0, 6)}
-              className="mb-12" 
+              className="mb-8 md:mb-12" 
             />
             
             {/* Trending Posts Section */}
             <ArticleSection 
-              title="Trending Posts" 
+              title="Trending Stories" 
               articles={[...businessNews, ...techNews].slice(0, 6)}
-              className="mb-12" 
+              className="mb-8 md:mb-12" 
             />
           </>
         )}

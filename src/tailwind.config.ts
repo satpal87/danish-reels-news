@@ -68,10 +68,9 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
-			borderRadius: {
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+			fontFamily: {
+				sans: ['Inter', 'sans-serif'],
+				serif: ['Playfair Display', 'serif'],
 			},
 			keyframes: {
 				'accordion-down': {
@@ -138,10 +137,22 @@ export default {
 				'slide-left': 'slide-left 0.3s ease-out forwards',
 				'progress': 'progress 30s linear forwards'
 			},
-			transitionProperty: {
-				'height': 'height',
-				'spacing': 'margin, padding',
-			}
+			typography: {
+				DEFAULT: {
+					css: {
+						maxWidth: '100ch',
+						h1: {
+							fontFamily: 'Playfair Display, serif',
+						},
+						h2: {
+							fontFamily: 'Playfair Display, serif',
+						},
+						h3: {
+							fontFamily: 'Playfair Display, serif',
+						},
+					},
+				},
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

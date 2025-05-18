@@ -42,11 +42,11 @@ export function TubelightNavbar({ items, className }: NavBarProps) {
   return (
     <div
       className={cn(
-        "fixed bottom-8 left-1/2 -translate-x-1/2 z-50",
+        "fixed bottom-6 left-1/2 -translate-x-1/2 z-50",
         className,
       )}
     >
-      <div className="flex items-center gap-1 bg-background/80 border border-border backdrop-blur-lg py-2 px-2 rounded-full shadow-lg">
+      <div className="flex items-center gap-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 backdrop-blur-lg py-2 px-2 rounded-full shadow-lg">
         {items.map((item) => {
           const Icon = item.icon
           const isActive = activeTab === item.name
@@ -58,19 +58,19 @@ export function TubelightNavbar({ items, className }: NavBarProps) {
               onClick={() => setActiveTab(item.name)}
               className={cn(
                 "relative flex flex-col items-center justify-center px-4 py-2 rounded-full transition-colors",
-                "text-foreground/60 hover:text-primary",
-                isActive && "text-primary",
+                "text-gray-500 dark:text-gray-400",
+                isActive ? "text-blue-600 dark:text-blue-400" : "hover:text-blue-600 dark:hover:text-blue-400"
               )}
             >
               <span className="relative z-10">
-                <Icon size={20} strokeWidth={2.5} />
+                <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
               </span>
               <span className="text-[10px] mt-1 font-medium">{item.name}</span>
               
               {isActive && (
                 <motion.div
                   layoutId="lamp"
-                  className="absolute inset-0 w-full bg-primary/10 rounded-full -z-10"
+                  className="absolute inset-0 w-full bg-blue-50 dark:bg-blue-900/20 rounded-full -z-10"
                   initial={false}
                   transition={{
                     type: "spring",
@@ -78,8 +78,8 @@ export function TubelightNavbar({ items, className }: NavBarProps) {
                     damping: 30,
                   }}
                 >
-                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-6 h-1 bg-primary rounded-t-full">
-                    <div className="absolute w-10 h-5 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
+                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-6 h-1 bg-blue-600 dark:bg-blue-400 rounded-t-full">
+                    <div className="absolute w-10 h-5 bg-blue-200/50 dark:bg-blue-400/20 rounded-full blur-md -top-2 -left-2" />
                   </div>
                 </motion.div>
               )}

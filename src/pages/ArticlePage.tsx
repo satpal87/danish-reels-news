@@ -12,11 +12,16 @@ import ArticleLimitMessage from "@/components/article/ArticleLimitMessage";
 import ArticleViewTracker from "@/components/article/ArticleViewTracker";
 import RelatedArticles from "@/components/article/RelatedArticles";
 import { NewsArticle } from "@/services/newsService";
+import NavBar from "@/components/NavBar";
+import { Home, Bookmark, Bell, Search } from "lucide-react";
+import { TubelightNavbar } from "@/components/ui/tubelight-navbar";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const ArticlePage = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const [isLimited, setIsLimited] = useState(false);
+  const isMobile = useIsMobile();
 
   // Check limits first, before loading article content
   useEffect(() => {
@@ -90,9 +95,18 @@ const ArticlePage = () => {
     return <ArticleLimitMessage />;
   }
 
+  // Mobile navigation items
+  const navItems = [
+    { name: "Home", url: "/", icon: Home },
+    { name: "Saved", url: "/saved", icon: Bookmark },
+    { name: "Search", url: "/search", icon: Search },
+    { name: "Notifs", url: "/notifications", icon: Bell },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-black text-gray-900 dark:text-white">
-      <div className="flex-grow">
+      <NavBar />
+      <div className="flex-grow pt-16 pb-16 md:pb-0">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -107,6 +121,9 @@ const ArticlePage = () => {
 
         <ArticleViewCounter />
       </div>
+      
+      {/* Mobile Bottom Navigation */}
+      {isMobile && <TubelightNavbar items={navItems} />}
     </div>
   );
 };

@@ -3,12 +3,15 @@ import { Link } from "react-router-dom";
 import { NewsArticle } from "@/services/newsService";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatPublishedDate } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface RelatedArticlesProps {
   articles: NewsArticle[];
 }
 
 const RelatedArticles = ({ articles }: RelatedArticlesProps) => {
+  const isMobile = useIsMobile();
+
   if (!articles || articles.length === 0) {
     return null;
   }
@@ -18,7 +21,7 @@ const RelatedArticles = ({ articles }: RelatedArticlesProps) => {
       <div className="border-t border-gray-200 dark:border-gray-800 pt-8 mb-6">
         <h2 className="text-2xl font-bold mb-6">More Articles You Might Like</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className={`grid grid-cols-1 ${isMobile ? 'gap-4' : 'md:grid-cols-2 gap-6'}`}>
           {articles.map((article) => (
             <Card key={article.id} className="hover:shadow-md transition-shadow">
               <Link to={`/article/${article.id}`} className="block h-full">

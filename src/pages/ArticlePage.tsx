@@ -13,7 +13,7 @@ import ArticleViewTracker from "@/components/article/ArticleViewTracker";
 import RelatedArticles from "@/components/article/RelatedArticles";
 import { NewsArticle } from "@/services/newsService";
 import NavBar from "@/components/NavBar";
-import { Home, Bookmark, Bell, Search } from "lucide-react";
+import { Home, Bookmark, Bell, Search, User } from "lucide-react";
 import { TubelightNavbar } from "@/components/ui/tubelight-navbar";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -98,15 +98,15 @@ const ArticlePage = () => {
   // Mobile navigation items
   const navItems = [
     { name: "Home", url: "/", icon: Home },
-    { name: "Saved", url: "/saved", icon: Bookmark },
     { name: "Search", url: "/search", icon: Search },
-    { name: "Notifs", url: "/notifications", icon: Bell },
+    { name: "Saved", url: "/saved", icon: Bookmark },
+    { name: "Account", url: user ? "/settings" : "/auth", icon: User },
   ];
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-black text-gray-900 dark:text-white">
       <NavBar />
-      <div className="flex-grow pt-16 pb-16 md:pb-0">
+      <div className="flex-grow pt-16 pb-24 md:pb-0">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>

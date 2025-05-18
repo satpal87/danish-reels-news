@@ -1,16 +1,17 @@
+
 import { useEffect, useState } from 'react';
 import { toast } from "@/components/ui/use-toast";
 import { useNavigate } from 'react-router-dom';
 import { getNewsArticles, NewsArticle } from '@/services/newsService';
-import SearchBar from '@/components/SearchBar';
 import { formatPublishedDate } from '@/lib/utils';
 import { NewsHero } from '@/components/blocks/NewsHero';
 import { ArticleSection } from '@/components/ArticleSection';
 import PageFooter from '@/components/PageFooter';
 import NavBar from '@/components/NavBar';
 import { TubelightNavbar } from '@/components/ui/tubelight-navbar';
-import { Home, Bookmark, Bell, Search } from 'lucide-react';
+import { Home, Bookmark, Search, User } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useAuth } from '@/context/AuthContext';
 
 const HomePage = () => {
   const [trendingNews, setTrendingNews] = useState<NewsArticle[]>([]);
@@ -21,6 +22,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { user } = useAuth();
   
   useEffect(() => {
     const fetchArticles = async () => {
@@ -84,16 +86,16 @@ const HomePage = () => {
   // Mobile navigation items
   const navItems = [
     { name: "Home", url: "/", icon: Home },
-    { name: "Saved", url: "/saved", icon: Bookmark },
     { name: "Search", url: "/search", icon: Search },
-    { name: "Notifs", url: "/notifications", icon: Bell },
+    { name: "Saved", url: "/saved", icon: Bookmark },
+    { name: "Account", url: user ? "/settings" : "/auth", icon: User },
   ];
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <NavBar />
       {/* Content */}
-      <main className="flex-1 pb-20 md:pb-12 max-w-7xl mx-auto px-4 sm:px-6 w-full pt-16">
+      <main className="flex-1 pb-24 md:pb-12 max-w-7xl mx-auto px-4 sm:px-6 w-full pt-16">
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>

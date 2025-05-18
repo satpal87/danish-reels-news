@@ -4,6 +4,7 @@ import { NewsArticle } from '@/services/newsService';
 import { formatPublishedDate } from '@/lib/utils';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ArticleSectionProps {
   title: string;
@@ -13,15 +14,16 @@ interface ArticleSectionProps {
 
 export function ArticleSection({ title, articles, className }: ArticleSectionProps) {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   
   if (articles.length === 0) {
     return null;
   }
 
   return (
-    <section className={cn("py-8", className)}>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">
+    <section className={cn("py-6", className)}>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold">
           <span className="inline-block border-b-2 border-blue-600 pb-1">{title}</span>
         </h2>
         <button 
@@ -32,7 +34,7 @@ export function ArticleSection({ title, articles, className }: ArticleSectionPro
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className={`grid grid-cols-1 ${isMobile ? 'gap-4' : 'sm:grid-cols-2 lg:grid-cols-3 gap-6'}`}>
         {articles.map((article) => (
           <div 
             key={article.id}

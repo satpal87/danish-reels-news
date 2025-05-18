@@ -1,11 +1,10 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Bell, Bookmark, ChevronDown } from 'lucide-react';
+import { Search, Bell, Bookmark, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import ThemeToggle from '@/components/ThemeToggle';
-import Logo from '@/components/Logo';
 import SearchBar from '@/components/SearchBar';
 import {
   NavigationMenu,
@@ -14,7 +13,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +29,7 @@ const NavBar = () => {
   const { user, signOut } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -60,7 +60,7 @@ const NavBar = () => {
   ];
 
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+    <header className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
       isScrolled 
         ? 'bg-white/90 dark:bg-gray-950/90 backdrop-blur-md shadow-sm' 
         : 'bg-white dark:bg-gray-950'
@@ -69,16 +69,14 @@ const NavBar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <Logo size="medium" />
+            <span className="text-2xl font-bold">
+              <span className="text-danish-red">danish</span>
+              <span className="dark:text-white">news</span>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/" className={`text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors ${
-              location.pathname === '/' ? 'text-blue-600 dark:text-blue-400' : ''
-            }`}>
-              Home
-            </Link>
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
@@ -123,11 +121,6 @@ const NavBar = () => {
           
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
-            {/* Theme Toggle */}
-            <div className="hidden md:block">
-              <ThemeToggle />
-            </div>
-            
             {/* Search Button */}
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -143,9 +136,9 @@ const NavBar = () => {
             </Link>
             
             {/* Notifications */}
-            <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <Link to="/notifications" className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
               <Bell className="h-5 w-5" />
-            </button>
+            </Link>
             
             {/* User Profile */}
             {user ? (
@@ -172,7 +165,6 @@ const NavBar = () => {
                   <DropdownMenuItem onClick={() => navigate('/settings')}>
                     Settings
                   </DropdownMenuItem>
-                  {/* Admin link for special users */}
                   <DropdownMenuItem onClick={() => navigate('/admin')}>
                     Admin Dashboard
                   </DropdownMenuItem>
@@ -187,9 +179,17 @@ const NavBar = () => {
                 to="/auth"
                 className="py-1.5 px-3 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
               >
-                Sign in
+                Sign In
               </Link>
             )}
+            
+            {/* Mobile Menu Button */}
+            <button 
+              className="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <Menu className="h-5 w-5" />
+            </button>
           </div>
         </div>
         
@@ -197,6 +197,52 @@ const NavBar = () => {
         {isSearchOpen && (
           <div className="py-3 px-4">
             <SearchBar onSearch={handleSearch} />
+          </div>
+        )}
+        
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden py-4 px-4 border-t border-gray-200 dark:border-gray-800">
+            <div className="flex flex-col space-y-3">
+              <Link 
+                to="/" 
+                className="px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Home
+              </Link>
+              {categoryItems.map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className="px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <Link 
+                to="/contact" 
+                className="px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contact Us
+              </Link>
+              <Link 
+                to="/about" 
+                className="px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                About Us
+              </Link>
+              <Link 
+                to="/timeline" 
+                className="px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Timeline
+              </Link>
+            </div>
           </div>
         )}
       </div>

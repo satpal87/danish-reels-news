@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,8 +17,8 @@ import AuthPage from "./pages/AuthPage";
 import ReadingHistoryPage from "./pages/ReadingHistoryPage";
 import { useAuth } from './context/AuthContext';
 import { AuthProvider } from './context/AuthContext';
-import Footer from './components/Footer';
 import NavBar from './components/NavBar';
+import PageFooter from './components/PageFooter';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -68,7 +69,7 @@ const AppContent = () => {
     <div className="relative min-h-screen flex flex-col">
       <NavBar />
       
-      <div className="flex-grow">
+      <div className="flex-grow pt-16">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/article/:id" element={<ArticlePage />} />
@@ -96,7 +97,7 @@ const AppContent = () => {
         </Routes>
       </div>
       
-      <Footer />
+      <PageFooter />
     </div>
   );
 };

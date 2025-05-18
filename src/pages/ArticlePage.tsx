@@ -7,11 +7,11 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { hasReachedDailyLimit } from "@/services/articleViewService";
 import { ArticleViewCounter } from "@/components/ArticleViewCounter";
-import ArticleHeader from "@/components/article/ArticleHeader";
 import ArticleContent from "@/components/article/ArticleContent";
 import ArticleLimitMessage from "@/components/article/ArticleLimitMessage";
 import ArticleViewTracker from "@/components/article/ArticleViewTracker";
-import PageFooter from "@/components/PageFooter";
+import RelatedArticles from "@/components/article/RelatedArticles";
+import { NewsArticle } from "@/services/newsService";
 
 const ArticlePage = () => {
   const { id } = useParams();
@@ -59,6 +59,32 @@ const ArticlePage = () => {
     enabled: !isLimited || !!user, // Only run query if user has not reached limit or is logged in
   });
 
+  // Query for related articles based on same category
+  const { data: relatedArticles } = useQuery({
+    queryKey: ["relatedArticles", article?.category, id],
+    queryFn: async () => {
+      if (!article?.category) return [];
+
+      const { data, error } = await supabase
+        .from("news_articles")
+        .select("*")
+        .eq("category", article.category)
+        .eq("active", true)
+        .eq("status", "published")
+        .neq("id", id)
+        .order("published_date", { ascending: false })
+        .limit(4);
+
+      if (error) {
+        console.error("Error fetching related articles:", error);
+        return [];
+      }
+
+      return data as NewsArticle[];
+    },
+    enabled: !!article?.category, // Only run when we have the main article's category
+  });
+
   // If user has reached daily limit
   if (isLimited) {
     return <ArticleLimitMessage />;
@@ -66,8 +92,6 @@ const ArticlePage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-black text-gray-900 dark:text-white">
-      <ArticleHeader />
-
       <div className="flex-grow">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
@@ -76,6 +100,7 @@ const ArticlePage = () => {
         ) : (
           <>
             <ArticleContent article={article} />
+            <RelatedArticles articles={relatedArticles || []} />
             <ArticleViewTracker articleId={id} isLimited={isLimited} />
           </>
         )}
